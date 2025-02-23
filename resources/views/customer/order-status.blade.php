@@ -1,5 +1,5 @@
 <x-customer-layout>
     <div>
-        <livewire:customer.customer-dashboard />
+        <livewire:customer.transaction-status />
     </div>
 </x-customer-layout>

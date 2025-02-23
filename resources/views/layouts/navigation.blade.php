@@ -1,4 +1,5 @@
 <nav x-data="{ open: false }" class="bg-white relative sticky top-0 border-b border-gray-100">
+
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -26,7 +27,7 @@
                                 </svg>
                                 {{ __('Dashboard') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            <x-nav-link :href="route('superadmin.shops')" :active="request()->routeIs('superadmin.shops')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="lucide lucide-store mr-1">
@@ -73,7 +74,18 @@
                                 </svg>
                                 {{ __('Dashboard') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            <x-nav-link :href="route('admin.catalog')" :active="request()->routeIs('admin.catalog')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-book-image mr-1">
+                                    <path d="m20 13.7-2.1-2.1a2 2 0 0 0-2.8 0L9.7 17" />
+                                    <path
+                                        d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
+                                    <circle cx="10" cy="8" r="2" />
+                                </svg>
+                                {{ __('Catalog') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.staff')" :active="request()->routeIs('admin.staff')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="lucide lucide-users-round mr-1">
@@ -82,6 +94,19 @@
                                     <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" />
                                 </svg>
                                 {{ __('Staffs') }}
+                            </x-nav-link>
+                        @break
+
+                        @case('staff')
+                            <x-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.index')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-circle-gauge mr-1">
+                                    <path d="M15.6 2.7a10 10 0 1 0 5.7 5.7" />
+                                    <circle cx="12" cy="12" r="2" />
+                                    <path d="M13.4 10.6 19 5" />
+                                </svg>
+                                {{ __('Dashboard') }}
                             </x-nav-link>
                         @break
 
@@ -135,8 +160,9 @@
                         <img src="https://cdn.devdojo.com/images/may2023/adam.jpeg"
                             class="object-cover w-8 h-8 border rounded-full border-neutral-200" />
                         <span class="flex flex-col items-start flex-shrink-0 h-full ml-2 leading-none translate-y-px">
-                            <span>Adam Wathan</span>
-                            <span class="text-xs font-light text-neutral-400">@adamwathan</span>
+                            <span>{{ auth()->user()->name }}</span>
+                            <span
+                                class="text-xs font-light truncate w-20 text-neutral-400">{{ auth()->user()->email }}</span>
                         </span>
                         <svg class="absolute right-0 w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -238,4 +264,6 @@
             </div>
         </div>
     </div>
+
+
 </nav>

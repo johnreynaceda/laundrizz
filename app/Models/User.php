@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -24,7 +23,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'user_type',
         'is_approved',
-        'requested_otp'
+        'requested_otp',
+        'email_verified_at',
     ];
 
     /**
@@ -46,7 +46,21 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
+    }
+
+    public function shop()
+    {
+        return $this->hasOne(Shop::class);
+    }
+
+    public function staff()
+    {
+        return $this->hasOne(Staff::class);
+    }
+
+    public function locations(){
+        return $this->hasMany(Location::class);
     }
 }

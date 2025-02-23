@@ -85,6 +85,7 @@
                             <div
                                 class="flex flex-col items-start justify-end w-full pt-4 md:items-center md:w-1/3 md:flex-row md:py-0">
                                 <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
                                     <a href="#"
                                         class="w-full px-6 py-2 mr-0 text-gray-700 md:px-3 md:mr-2 lg:mr-3 md:w-auto">Sign
                                         In</a>
@@ -113,196 +114,33 @@
                 </div>
             </nav>
 
-            <!-- Main Hero Content -->
-            {{-- <div
-                class="container max-w-sm py-32 mx-auto mt-px text-left sm:max-w-md md:max-w-lg sm:px-4 md:max-w-none md:text-center">
-                <h1
-                    class="text-3xl font-bold leading-10 tracking-tight text-left text-gray-900 md:text-center sm:text-4xl md:text-7xl lg:text-8xl">
-                    Start Crafting Your <br class="hidden sm:block"> Next Great Idea</h1>
-                <div class="mx-auto mt-5 text-gray-400 md:mt-8 md:max-w-lg md:text-center md:text-xl">Simplifying the
-                    creation of landing pages, blog pages, application pages and so much more!</div>
-                <div
-                    class="flex flex-col items-center justify-center mt-8 space-y-4 text-center sm:flex-row sm:space-y-0 sm:space-x-4">
-                    <span class="relative inline-flex w-full md:w-auto">
-                        <a href="#_"
-                            class="inline-flex items-center justify-center w-full px-8 py-4 text-base font-medium leading-6 text-white bg-gray-900 border border-transparent rounded-full xl:px-10 md:w-auto hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800">
-                            Purchase Now
-                        </a>
-                    </span>
-                    <span class="relative inline-flex w-full md:w-auto">
-                        <a href="#_"
-                            class="inline-flex items-center justify-center w-full px-8 py-4 text-base font-medium leading-6 text-gray-900 bg-gray-100 border border-transparent rounded-full xl:px-10 md:w-auto hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200">Learn
-                            More</a>
-                    </span>
-                </div>
-            </div> --}}
-            <div>
-                <div>
-                    <h1 class=" text-sm font-semibold text-gray-500">Good day, {{ Str::ucfirst(auth()->user()->name) }}
-                    </h1>
-                    <div class="mt-5">
-                        <p class="text-lg font-semibold">Find your closest
-                        <p class="text-2xl font-bold text-main leading-6">Laundry Shops</p>
-                        </p>
-                    </div>
-                    <div class="mt-5 bg-main flex items-center space-x-3 rounded-xl px-5 py-3">
-                        <div class="h-12 w-12 rounded-full bg-white grid place-content-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" viewBox="0 0 24 24"
-                                fill="currentColor">
-                                <path
-                                    d="M18.364 17.364L12 23.7279L5.63604 17.364C2.12132 13.8492 2.12132 8.15076 5.63604 4.63604C9.15076 1.12132 14.8492 1.12132 18.364 4.63604C21.8787 8.15076 21.8787 13.8492 18.364 17.364ZM12 15C14.2091 15 16 13.2091 16 11C16 8.79086 14.2091 7 12 7C9.79086 7 8 8.79086 8 11C8 13.2091 9.79086 15 12 15ZM12 13C10.8954 13 10 12.1046 10 11C10 9.89543 10.8954 9 12 9C13.1046 9 14 9.89543 14 11C14 12.1046 13.1046 13 12 13Z">
-                                </path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h1 class="text-sm text-gray-400">Your Location</h1>
-                            <div class="flex space-x-4 items-center text-white">
-                                <h1 class="text-sm ">Please set your location</h1>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round"
-                                    class="lucide lucide-chevron-down">
-                                    <path d="m6 9 6 6 6-6" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-10" x-data="{ modalOpen: false }" @keydown.escape.window="modalOpen = false">
-                        <h1 class="text-lg text-gray-600">Select Laundry Shop</h1>
-                        <div class="mt-3">
 
-                            <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
-                                slides-per-view="2" space-between="20" free-mode="true">
-                                <swiper-slide>
-                                    <div @click="modalOpen=true"
-                                        class="w-48 h-48 border rounded-3xl overflow-hidden bg-gradient-to-tr from-main via-main to-white relative">
-                                        <img src="{{ asset('images/laundry1.jpg') }}"
-                                            class="w-full h-full opacity-40 object-cover" alt="">
-                                        <div class="absolute bottom-5 left-2 text-white">
-                                            <p class="font-bold">GEMS Laundry Shop</p>
-                                        </div>
-                                    </div>
-                                </swiper-slide>
-                                <swiper-slide>
-                                    <div
-                                        class="w-48 h-48 border rounded-3xl overflow-hidden bg-gradient-to-tr from-main via-main to-white relative">
-                                        <img src="{{ asset('images/laundry2.jpg') }}"
-                                            class="w-full h-full opacity-40 object-cover" alt="">
-                                        <div class="absolute bottom-5 left-2 text-white">
-                                            <p class="font-bold">MR Laundry Shop</p>
-                                        </div>
-                                    </div>
-                                </swiper-slide>
-                                <swiper-slide>
-                                    <div
-                                        class="w-48 h-48 border rounded-3xl overflow-hidden bg-gradient-to-tr from-main via-main to-white relative">
-                                        <img src="{{ asset('images/laundry2.jpg') }}"
-                                            class="w-full h-full opacity-40 object-cover" alt="">
-                                        <div class="absolute bottom-5 left-2 text-white">
-                                            <p class="font-bold">MR Laundry Shop</p>
-                                        </div>
-                                    </div>
-                                </swiper-slide>
-                            </swiper-container>
-                        </div>
-                        <div class="mt-10">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque vitae dolor repellendus
-                            tempora sit quae reprehenderit deleniti aut temporibus. Quis molestias iure quia sequi ex
-                            libero repellendus assumenda adipisci pariatur, impedit illum omnis facilis odio enim
-                            dolorem molestiae in. Odio quidem aperiam explicabo, voluptas possimus inventore facere
-                            praesentium, rerum optio officia nihil dolore reiciendis veniam ducimus nam consequatur amet
-                            nulla tempore impedit, incidunt excepturi vel vitae! Commodi quae optio quaerat in iusto
-                            esse, obcaecati fugiat quidem. Totam quibusdam autem enim, blanditiis magni nihil
-                            exercitationem, molestias deserunt iste ad non provident, sint labore eveniet modi soluta
-                            doloribus officiis. Ea, perferendis voluptate?
-                        </div>
-                        <div class="relative z-50 w-auto h-auto">
-                            <template x-teleport="body">
-                                <div x-show="modalOpen"
-                                    class="fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen"
-                                    x-cloak>
-                                    <!-- Background overlay -->
-                                    <div x-show="modalOpen" x-transition:enter="ease-out duration-300"
-                                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                                        x-transition:leave="ease-in duration-300"
-                                        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                                        @click="modalOpen = false"
-                                        class="absolute inset-0 w-full h-full bg-black bg-opacity-40">
-                                    </div>
-
-                                    <!-- Modal content -->
-                                    <div x-show="modalOpen" x-trap.inert.noscroll="modalOpen"
-                                        x-transition:enter="ease-out duration-300"
-                                        x-transition:enter-start="opacity-0 translate-y-full"
-                                        x-transition:enter-end="opacity-100 translate-y-0"
-                                        x-transition:leave="ease-in duration-300"
-                                        x-transition:leave-start="opacity-100 translate-y-0"
-                                        x-transition:leave-end="opacity-0 translate-y-full"
-                                        class="relative w-full h-full py-6 mt-96 bg-white  rounded-t-3xl px-7 sm:max-w-lg sm:rounded-lg">
-
-                                        <!-- Modal Header -->
-                                        <div class="flex items-center justify-between pb-2">
-                                            <h3 class="text-lg font-semibold">Select Service Type</h3>
-                                            <button @click="modalOpen = false"
-                                                class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 text-gray-600 rounded-full hover:text-gray-800 hover:bg-gray-50">
-                                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                                    stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        </div>
-
-                                        <!-- Modal Content -->
-                                        <div class="relative w-auto">
-                                            <div class="mt-10 grid place-content-center grid-cols-2 gap-5">
-                                                <div
-                                                    class="bg-gray-100 w-40 h-40 rounded-3xl text-center grid place-content-center">
-                                                    <x-shared.svg.pickup class="h-24 w-24" />
-                                                    <span class="font-semibold text-gray-600 mt-2">Pick Up</span>
-                                                </div>
-                                                <div
-                                                    class="bg-gray-100 w-40 h-40 rounded-3xl grid place-content-center text-center">
-                                                    <x-shared.svg.dropoff class="h-24 w-24" />
-                                                    <span class="font-semibold text-gray-600 mt-2">Drop-off</span>
-                                                </div>
-                                                <div
-                                                    class="bg-gray-100 w-40 h-40 rounded-3xl grid text-center place-content-center col-span-2 mx-auto">
-                                                    <x-shared.svg.analytics class="h-24 w-24" />
-                                                    <span class="font-semibold text-gray-600 mt-2">Analytics</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
+            {{ $slot }}
             <!-- End Main Hero Content -->
             <div class="fixed bottom-0 left-0 right-0">
-                <div class="bg-white text-main rounded-t-3xl p-2 px-10 justify-between flex items-center">
-                    <div class="h-14 w-14 bg-white grid place-content-center rounded-full">
-                        <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                            fill="currentColor" aria-hidden="true">
+                <div class="bg-white  rounded-t-3xl p-2 px-10 justify-between flex items-center ">
+                    <a href="{{ route('customer.index') }}"
+                        class="h-14 w-14 bg-white  grid place-content-center rounded-full  {{ request()->routeIs('customer.index') ? ' text-green-600' : 'text-main' }}">
+                        <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                            aria-hidden="true">
                             <path
                                 d="M20.83 8.01l-6.55-5.24C13 1.75 11 1.74 9.73 2.76L3.18 8.01c-.94.75-1.51 2.25-1.31 3.43l1.26 7.54C3.42 20.67 4.99 22 6.7 22h10.6c1.69 0 3.29-1.36 3.58-3.03l1.26-7.54c.18-1.17-.39-2.67-1.31-3.42zM12.75 18c0 .41-.34.75-.75.75s-.75-.34-.75-.75v-3c0-.41.34-.75.75-.75s.75.34.75.75v3z">
                             </path>
                         </svg>
-                    </div>
-                    <div class="h-14 w-14 bg-white grid place-content-center rounded-full">
-                        <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                            fill="currentColor" aria-hidden="true">
-                            <path
-                                d="M11 1.988c-4.97 0-9.01 4.04-9.01 9.01s4.04 9.01 9.01 9.01 9.01-4.04 9.01-9.01-4.04-9.01-9.01-9.01zm0 11.26H8c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h3c.41 0 .75.34.75.75s-.34.75-.75.75zm3-3H8c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h6c.41 0 .75.34.75.75s-.34.75-.75.75zM21.99 18.95c-.33-.61-1.03-.95-1.97-.95-.71 0-1.32.29-1.68.79-.36.5-.44 1.17-.22 1.84.43 1.3 1.18 1.59 1.59 1.64.06.01.12.01.19.01.44 0 1.12-.19 1.78-1.18.53-.77.63-1.54.31-2.15z">
-                            </path>
-                        </svg>
-                    </div>
-                    <div class="h-14 w-14 bg-white grid place-content-center rounded-full">
+                    </a>
+                    <a href="{{ route('customer.status') }}">
+                        <div
+                            class="h-14 w-14  bg-white  grid place-content-center rounded-full {{ request()->routeIs('customer.status') ? '  text-green-600' : 'text-main' }}">
+                            <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="currentColor" aria-hidden="true">
+                                <path
+                                    d="M11 1.988c-4.97 0-9.01 4.04-9.01 9.01s4.04 9.01 9.01 9.01 9.01-4.04 9.01-9.01-4.04-9.01-9.01-9.01zm0 11.26H8c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h3c.41 0 .75.34.75.75s-.34.75-.75.75zm3-3H8c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h6c.41 0 .75.34.75.75s-.34.75-.75.75zM21.99 18.95c-.33-.61-1.03-.95-1.97-.95-.71 0-1.32.29-1.68.79-.36.5-.44 1.17-.22 1.84.43 1.3 1.18 1.59 1.59 1.64.06.01.12.01.19.01.44 0 1.12-.19 1.78-1.18.53-.77.63-1.54.31-2.15z">
+                                </path>
+                            </svg>
+                        </div>
+                    </a>
+                    <a href="{{ route('customer.transaction') }}"
+                        class="h-14 w-14 bg-white grid place-content-center rounded-full {{ request()->routeIs('customer.transaction') ? '  text-green-600' : 'text-main' }}">
                         <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                             fill="currentColor" aria-hidden="true">
                             <path
@@ -312,9 +150,9 @@
                                 d="M17.17 3.209l-1.67-.39c-3.34-.79-5.33-.14-6.5 2.28-.3.61-.54 1.35-.74 2.2l-.98 4.19c-.98 4.18.31 6.24 4.48 7.23l1.68.4c.58.14 1.12.23 1.62.27 3.12.3 4.78-1.16 5.62-4.77l.98-4.18c.98-4.18-.3-6.25-4.49-7.23zm-1.88 10.12c-.09.34-.39.56-.73.56-.06 0-.12-.01-.19-.02l-2.91-.74a.75.75 0 01.37-1.45l2.91.74c.41.1.65.51.55.91zm2.93-3.38c-.09.34-.39.56-.73.56-.06 0-.12-.01-.19-.02l-4.85-1.23a.75.75 0 01.37-1.45l4.85 1.23c.41.09.65.5.55.91z">
                             </path>
                         </svg>
-                    </div>
+                    </a>
 
-                    <div class="h-14 w-14 bg-white grid place-content-center rounded-full">
+                    <div class="h-14 w-14 bg-white text-main grid place-content-center rounded-full">
                         <div class="border h-12 w-12 p-0.5 rounded-full">
                             <img src="https://framerusercontent.com/images/dWg1XJhwq6UCrq3YqbgEws2s6k.jpg"
                                 class="rounded-full" alt="">

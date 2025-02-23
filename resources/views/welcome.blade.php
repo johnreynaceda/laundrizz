@@ -17,6 +17,8 @@
             display: none !important;
         }
     </style>
+    <wireui:scripts />
+    <script src="//unpkg.com/alpinejs" defer></script>
 
     @filamentStyles
     @vite('resources/css/app.css')
@@ -49,8 +51,8 @@
                     <a href="#" class="text-sm/6 font-semibold text-gray-900">Company</a>
                 </div> --}}
                 <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <a href="#" class="text-sm/6 font-semibold text-gray-900">Log in <span
-                            aria-hidden="true">&rarr;</span></a>
+                    {{-- <a href="#" class="text-sm/6 font-semibold text-gray-900">Log in <span
+                            aria-hidden="true">&rarr;</span></a> --}}
                 </div>
             </nav>
             <!-- Mobile menu, show/hide based on menu open state. -->
@@ -121,9 +123,12 @@
                         aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat
                         veniam occaecat.</p>
                     <div class="mt-10 flex items-center justify-center gap-x-6">
-                        <a href="{{ route('login') }}"
+                        {{-- <a 
                             class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get
-                            started</a>
+                            started</a> --}}
+
+                        <x-button href="{{ route('login') }}" label="Get Started" lg squared teal class="font-medium"
+                            right-icon="arrow-right" />
 
                     </div>
                 </div>
@@ -175,14 +180,13 @@
                             <div class="p-8">
                                 <p
                                     class="font-semibold flex lg:text-3xl items-baseline text-2xl tracking-tighter text-base-900">
-                                    <span data-monthly="$29.00" data-annual="$19.00"
-                                        x-text="$el.dataset[duration]"></span>
+
                                     <span class=" font-bold   ">
                                         <span ">&#8369;{{ number_format($item->amount, 2) }}</span>
                                     </span>
                                 </p>
                                 <div class="w-full mt-4">
-                                    <a href="{{ route('cart', ['id' => $item->id]) }}"
+                                    <a href=""
                                         class="flex items-center bg-white justify-center transition-all duration-200 focus:ring-2 focus:outline-none text-main hover:text-accent-500   h-9 px-4 py-2 text-sm font-medium rounded-md w-full">
                                         Get Started
                                     </a>

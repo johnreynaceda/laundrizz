@@ -28,7 +28,7 @@
 
 
         <div
-            class="w-full sm:max-w-lg mt-6 px-8 py-10 bg-gradient-to-t from-white via-transparent to-gray-100 2xl:shadow-md overflow-hidden 2xl:rounded-3xl">
+            class="w-full sm:max-w-lg mt-6 px-8 py-10 bg-gradient-to-t from-white via-transparent to-gray-100 2xl:shadow-md overflow-hidden ">
             <div class="flex flex-col justify-center items-center space-y-3">
                 <div class="h-20 w-20 bg-white shadow-xl border rounded-3xl grid place-content-center">
                     <x-shared.logo class="h-10 w-10" />
