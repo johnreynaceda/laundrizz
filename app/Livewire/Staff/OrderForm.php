@@ -115,7 +115,7 @@ class OrderForm extends Component implements HasForms
        OrderDetail::create([
         'service_transaction_id' => $this->order_id,
         'reference_number' => Carbon::parse(now())->format('ymd'). '0'.$this->order_id,
-        'estimated_time' => Carbon::parse($this->estimated_time)->format('h:i A'),
+        'estimated_time' => Carbon::parse($this->estimated_time),
        ]);
 
        $this->order->update([

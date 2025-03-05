@@ -38,6 +38,7 @@ class TransactionList extends Component implements HasForms, HasTable
                         'pending' => 'warning',
                         'Completed' => 'success',
                         'placed order' => 'info',
+                        'accepted' => 'success',
                     }),
                    ])->from('md')
             ])
