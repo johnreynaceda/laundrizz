@@ -42,5 +42,7 @@ class DatabaseSeeder extends Seeder
         //     'user_type' => 'customer',
         //     'email_verified_at' => now()
         // ]);
+
+        $this->call(ServiceTypeSeeder::class);
     }
 }

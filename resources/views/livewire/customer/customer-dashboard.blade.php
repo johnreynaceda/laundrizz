@@ -27,7 +27,8 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-10" x-data="{ modalOpen: @entangle('option_modal') }" @keydown.escape.window="modalOpen = false">
+            <div class="mt-10" x-data="{ modalOpen: @entangle('option_modal') }"
+                @keydown.escape.window="modalOpen = false">
                 <h1 class="text-lg text-gray-600">Select Laundry Shop</h1>
                 <div class="mt-3">
 
@@ -62,9 +63,8 @@
                 </div>
                 <div class="relative z-50 w-auto h-auto">
                     <template x-teleport="body">
-                        <div x-show="modalOpen " wire:ignore
-                            class="fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen"
-                            x-cloak>
+                        <div x-show="modalOpen" wire:ignore
+                            class="fixed inset-0 z-[99] flex items-end justify-center w-screen h-screen" x-cloak>
                             <!-- Background overlay -->
                             <div x-show="modalOpen" x-transition:enter="ease-out duration-300"
                                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -81,13 +81,13 @@
                                 x-transition:leave="ease-in duration-300"
                                 x-transition:leave-start="opacity-100 translate-y-0"
                                 x-transition:leave-end="opacity-0 translate-y-full"
-                                class="relative w-full max-w-lg mt-96 py-6 bg-white rounded-t-3xl px-7 sm:rounded-lg max-h-[90vh] overflow-y-auto">
+                                class="relative w-full max-w-lg bg-white rounded-t-3xl px-7 sm:rounded-lg max-h-[90vh] overflow-y-auto">
 
                                 <!-- Modal Header -->
-                                <div class="flex items-center justify-between pb-2">
+                                <div class="flex items-center justify-between py-4 border-b">
                                     <h3 class="text-lg font-semibold">Select Service Type</h3>
                                     <button @click="modalOpen = false"
-                                        class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 text-gray-600 rounded-full hover:text-gray-800 hover:bg-gray-50">
+                                        class="flex items-center justify-center w-8 h-8 text-gray-600 rounded-full hover:text-gray-800 hover:bg-gray-50">
                                         <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
                                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -97,30 +97,29 @@
                                 </div>
 
                                 <!-- Modal Content -->
-                                <div class="relative w-auto">
-                                    <div class="mt-10 grid place-content-center grid-cols-2 gap-5">
+                                <div class="p-4">
+                                    <div class="grid grid-cols-2 gap-5 place-content-center">
                                         @forelse (\App\Models\ServiceType::all() as $item)
                                             <div wire:click="selectOption({{ $item->id }})"
-                                                class="bg-gray-100 w-40 h-40 rounded-3xl text-center grid place-content-center">
+                                                class=" w-40 h-40 rounded-3xl grid place-content-center text-center cursor-pointer hover:bg-gray-200">
                                                 @if ($item->id == 1)
                                                     <x-shared.svg.pickup class="h-24 w-24" />
                                                 @else
                                                     <x-shared.svg.dropoff class="h-24 w-24" />
                                                 @endif
-                                                <span class="font-semibold text-gray-600 mt-2">Pick Up</span>
+                                                <span class="font-semibold text-gray-600 mt-2">
+                                                    {{ $item->id == 1 ? 'Pick Up' : 'Drop Off' }}
+                                                </span>
                                             </div>
                                         @empty
+                                            <p>No Service Types Available</p>
                                         @endforelse
-                                        {{-- <div wire:click="selectOption('Drop Off')"
-                                            class="bg-gray-100 w-40 h-40 rounded-3xl grid place-content-center text-center">
-                                            <x-shared.svg.dropoff class="h-24 w-24" />
-                                            <span class="font-semibold text-gray-600 mt-2">Drop-off</span>
-                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </template>
+
 
                 </div>
             </div>

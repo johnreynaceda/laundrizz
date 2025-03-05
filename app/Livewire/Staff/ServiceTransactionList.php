@@ -2,9 +2,16 @@
 
 namespace App\Livewire\Staff;
 
+use App\Models\ArrivalQueue;
+use App\Models\Catalog;
+use App\Models\CatalogService;
 use App\Models\ServiceTransaction;
 use App\Models\ServiceType;
 use Carbon\Carbon;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Support\Enums\FontWeight;
@@ -25,12 +32,19 @@ class ServiceTransactionList extends Component implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
 
+    public $catalogs = [];
     public $service_type_id;
     public $service_name;
+
+
+
     public function mount(){
         $this->service_type_id = request('id');
         $this->service_name = ServiceType::where('id', $this->service_type_id)->first()->name;
     }
+
+  
+    
 
     public function table(Table $table): Table
     {
@@ -45,7 +59,14 @@ class ServiceTransactionList extends Component implements HasForms, HasTable
                     Carbon::parse($record->created_at)->format('F d, Y')
                 )
                 ->html(),
-               ])->from('md')
+                    TextColumn::make('status')->badge()->color(fn (string $state): string => match ($state) {
+                        'pending' => 'warning',
+                        'accepted' => 'success',
+                        'Completed' => 'success',
+                        'placed order' => 'info',
+                    }),
+               ])->from('md'),
+
             ])
             ->filters([
                 // ...
@@ -58,9 +79,33 @@ class ServiceTransactionList extends Component implements HasForms, HasTable
                     ),
                 Action::make('reject')->color('danger')->size('xs')->icon('heroicon-m-hand-thumb-down'),
                 ])->hidden(fn($record) => $record->status != 'pending' ),
-                Action::make('on_the_way')->disabled(fn($record) => $record->is_accepted == false)->button()->color('warning')->size('xs')->icon('heroicon-o-arrow-long-right')->iconPosition(IconPosition::After),
-                Action::make('arrive')->disabled(fn($record) => $record->is_on_the_way == false)->button()->color('info')->size('xs')->icon('heroicon-o-home-modern')->iconPosition(IconPosition::After)
-            ])
+                Action::make('on_the_way')->hidden(fn($record) => $record->is_on_the_way)->disabled(fn($record) => $record->is_accepted == false)->button()->color('warning')->size('xs')->icon('heroicon-o-arrow-long-right')->iconPosition(IconPosition::After)->action(
+                    function($record){
+                        $record->update([
+                            'is_on_the_way' => true,
+                        ]);
+                        
+                        ArrivalQueue::create([
+                            'shop_id' => $record->shop_id,
+                            'user_id' => $record->user_id,
+                        ]);
+                    }
+                ),
+                Action::make('arrive')->hidden(fn($record) => $record->is_arrived)->disabled(fn($record) => $record->is_on_the_way == false)->button()->color('info')->size('xs')->icon('heroicon-o-home-modern')->iconPosition(IconPosition::After)->action(
+                    function($record){
+                        $record->update([
+                            'is_arrived' => true,
+                        ]);
+                        ArrivalQueue::where('shop_id', $record->shop_id)->where('user_id', $record->user_id)->delete();
+                    }
+                ),
+                Action::make('order_form')->hidden(
+                    fn($record) => $record->status == 'placed order' || $record->status == 'pending')
+                ->label('Order Form')->button()->size('xs')->icon('heroicon-s-document-text')->iconPosition(IconPosition::After)->url(fn($record) => route('staff.order-form', ['id' => $record->id])),
+                Action::make('order_form')->label('Order Detail')->hidden(
+                    fn($record) => $record->status != 'placed order'
+                )->button()->size('xs')->icon('heroicon-s-ticket')->iconPosition(IconPosition::After)->url(fn($record) => route('staff.order-detail', ['id' => $record->id]))
+                ])
             ->bulkActions([
                 // ...
             ]);

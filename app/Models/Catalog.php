@@ -11,4 +11,8 @@ class Catalog extends Model
     {
         return $this->hasMany(CatalogService::class);
     }
+
+    public function transactionOrderForms(){
+        return $this->hasMany(TransactionOrderForm::class);
+    }
 }

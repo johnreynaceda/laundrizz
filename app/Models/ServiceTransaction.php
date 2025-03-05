@@ -11,4 +11,16 @@ class ServiceTransaction extends Model
     public function serviceType(){
         return $this->belongsTo(ServiceType::class);
     }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function orderDetail(){
+        return $this->hasOne(OrderDetail::class);
+    }
+
+    public function transactionOrderForms(){
+        return $this->hasMany(TransactionOrderForm::class);
+    }
 }

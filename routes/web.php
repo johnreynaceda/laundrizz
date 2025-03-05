@@ -90,6 +90,12 @@ Route::prefix('staff')->middleware(['auth', 'verified'])
         Route::get('/services-transaction/{id}', function () {
             return view('staff.transaction');
         })->name('staff.transaction');
+        Route::get('/order-form/{id}', function () {
+            return view('staff.order-form');
+        })->name('staff.order-form');
+        Route::get('/order-detail/{id}', function () {
+            return view('staff.order-detail');
+        })->name('staff.order-detail');
        
     });
 

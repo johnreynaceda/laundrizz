@@ -24,7 +24,7 @@ class TransactionList extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(ServiceTransaction::query()->where('user_id', auth()->user()->id))
+            ->query(ServiceTransaction::query()->where('user_id', auth()->user()->id)->orderByDesc('created_at'))
             ->columns([
                 Split::make([
                     TextColumn::make('created_at')
@@ -34,6 +34,11 @@ class TransactionList extends Component implements HasForms, HasTable
                         Carbon::parse($record->created_at)->format('F d, Y')
                     )
                     ->html(),
+                    TextColumn::make('status')->badge()->color(fn (string $state): string => match ($state) {
+                        'pending' => 'warning',
+                        'Completed' => 'success',
+                        'placed order' => 'info',
+                    }),
                    ])->from('md')
             ])
             ->filters([
