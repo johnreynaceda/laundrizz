@@ -34,6 +34,7 @@ class TransactionList extends Component implements HasForms, HasTable
                         Carbon::parse($record->created_at)->format('F d, Y')
                     )
                     ->html(),
+                    TextColumn::make('serviceType.name')->badge()->icon('heroicon-s-tag'),
                     TextColumn::make('status')->badge()->color(fn (string $state): string => match ($state) {
                         'pending' => 'warning',
                         'Completed' => 'success',
@@ -46,7 +47,7 @@ class TransactionList extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-                Action::make('view')->icon('heroicon-o-eye')->button()->size(ActionSize::Small),
+                // Action::make('view')->icon('heroicon-o-eye')->button()->size(ActionSize::Small),
                 // Action::make('view_invoice')->icon('heroicon-o-file-invoice')->url(fn($record) => route('customer.transaction.invoice', $record->id)),
                 // Action::make('cancel_order')->icon('heroicon-o-x')->confirm('Are you sure you want to cancel this order?')
                 //     ->action(function (ServiceTransaction $record) {

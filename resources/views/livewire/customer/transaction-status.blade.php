@@ -88,7 +88,7 @@
 
             <div class="mt-5 text-center flex flex-col items-center justify-center">
                 @php
-                $time = $order->orderDetail->estimated_time; // Example: "09:00 PM"
+                $time = \Carbon\Carbon::parse($order->orderDetail->estimated_time)->format('h:i A'); // Example: "09:00 PM"
                 $createdAt = $order->orderDetail->created_at; // Example: "2025-03-01 10:00 AM"
 
                 // Convert the estimated time into Carbon with today's date

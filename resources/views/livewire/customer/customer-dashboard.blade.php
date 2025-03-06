@@ -34,7 +34,7 @@
 
                     <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" slides-per-view="2"
                         space-between="10" free-mode="true">
-                        @forelse (\App\Models\Shop::all() as $item)
+                        @forelse (\App\Models\Shop::where('is_active')->get() as $item)
                             <swiper-slide>
                                 <div wire:click="selectLaundry({{ $item->id }})"
                                     class="w-40 h-40 border rounded-3xl overflow-hidden bg-gradient-to-tr from-main via-main to-white relative">
@@ -46,6 +46,7 @@
                                 </div>
                             </swiper-slide>
                         @empty
+                            <p>No Laundry Shops Available</p>
                         @endforelse
 
                     </swiper-container>

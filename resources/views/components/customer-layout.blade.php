@@ -24,7 +24,7 @@
 </head>
 
 <body class="font-sans antialiased">
-    <section class="w-full px-6 pb-12 antialiased bg-white">
+    <section class="w-full px-6 pb-16 antialiased bg-white">
         <div class="mx-auto max-w-7xl">
 
             <nav class="relative z-50 h-24 select-none" x-data="{ showMenu: false }">
@@ -117,8 +117,8 @@
 
             {{ $slot }}
             <!-- End Main Hero Content -->
-            <div class="fixed bottom-0 left-0 right-0">
-                <div class="bg-white  rounded-t-3xl p-2 px-10 justify-between flex items-center ">
+            <div class="fixed bottom-2 left-0 right-0 px-4">
+                <div class="bg-white  border shadow-xl  rounded-full p-2 px-6 justify-between flex items-center ">
                     <a href="{{ route('customer.index') }}"
                         class="h-14 w-14 bg-white  grid place-content-center rounded-full  {{ request()->routeIs('customer.index') ? ' text-green-600' : 'text-main' }}">
                         <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"

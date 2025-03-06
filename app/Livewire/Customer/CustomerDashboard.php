@@ -18,7 +18,11 @@ class CustomerDashboard extends Component
     }
 
     public function selectOption($option){
-        $this->selected_option = $option;
+        $data = ServiceTransaction::where('user_id', auth()->user()->id)->where('status', '!=', 'Completed')->get();
+        if ($data->count() > 0) {
+            sweetalert()->info("You have an ongoing transaction.\nPlease complete your transaction before making a new one.");
+        }else{
+            $this->selected_option = $option;
 
        $service = ServiceTransaction::create([
         'user_id' => auth()->user()->id,
@@ -27,6 +31,9 @@ class CustomerDashboard extends Component
        ]);
 
         return redirect()->route('customer.transaction', ['id' => $service->id]);
+        }
+
+        
         
     }
 

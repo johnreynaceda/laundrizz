@@ -70,9 +70,7 @@ class OrderDetail extends Component
             $this->detail->update([
                 'is_complete' => true,
             ]);
-            $this->transaction->update([
-                'status' => 'Completed',
-            ]);
+            
         }else{
             dd('not processed');
         }

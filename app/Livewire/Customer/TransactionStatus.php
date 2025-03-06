@@ -96,6 +96,11 @@ class TransactionStatus extends Component implements HasForms
             $this->order->orderDetail->update([
                 'comment' => $this->comment
                ]);
+            $this->order->update([
+                'status' => 'Completed',
+            ]);
+
+            return redirect()->route('customer.status');
         }
 
         public function uploadPayment(){
