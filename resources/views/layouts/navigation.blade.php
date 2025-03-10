@@ -61,6 +61,15 @@
                                 </svg>
                                 {{ __('Users') }}
                             </x-nav-link>
+                            <x-nav-link :href="route('superadmin.payments')" :active="request()->routeIs('superadmin.payments')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-wallet-minimal mr-1">
+                                    <path d="M17 14h.01" />
+                                    <path d="M7 7h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14" />
+                                </svg>
+                                {{ __('Payments') }}
+                            </x-nav-link>
                         @break
 
                         @case('admin')
@@ -95,6 +104,7 @@
                                 </svg>
                                 {{ __('Staffs') }}
                             </x-nav-link>
+                           
                         @break
 
                         @case('staff')

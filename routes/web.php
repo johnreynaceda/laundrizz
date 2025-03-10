@@ -44,6 +44,9 @@ Route::prefix('superadmin')->middleware(['auth', 'verified'])
         Route::get('/shops', function () {
             return view('superadmin.shops');
         })->name('superadmin.shops');
+        Route::get('/payments', function () {
+            return view('superadmin.payments');
+        })->name('superadmin.payments');
     });
 
 Route::prefix('admin')->middleware(['auth', 'verified', ShopSetup::class])

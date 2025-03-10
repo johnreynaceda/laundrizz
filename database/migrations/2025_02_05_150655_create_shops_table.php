@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('subscription_id');
             $table->date('starting_date')->nullable();
             $table->foreignId('user_id');
-            $table->boolean('is_active')->default('false');
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

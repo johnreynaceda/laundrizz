@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('user_type');
             $table->boolean('is_approved')->default(false);
             $table->integer('requested_otp')->nullable();
+            $table->string('profile_photo')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

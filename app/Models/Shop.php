@@ -12,8 +12,17 @@ class Shop extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
+
     public function subscriptionPayments()
     {
         return $this->hasMany(SubscriptionPayment::class);
+    }
+
+    public function paymentMethod(){
+        return $this->hasOne(PaymentMethod::class);
     }
 }

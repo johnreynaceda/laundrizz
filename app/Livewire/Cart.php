@@ -51,7 +51,7 @@ class Cart extends Component implements HasForms
                     ->schema([
                         FileUpload::make('payment_image')->label('Image'),
                         ViewField::make('rating')
-                            ->view('filament.forms.empty'),
+                            ->view('filament.forms.qr_payment'),
                         TextInput::make('reference_number')->label('Reference Number')->numeric(),
 
                     ])->columns(2),

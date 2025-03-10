@@ -30,14 +30,14 @@ class LoginUser extends Component
     }
 
     public function login(){
-        sleep(2);
+        sleep(1);
 
         $this->validate();
 
         if (Auth::validate(['email' => $this->email, 'password' => $this->password])) {
             $this->attempt = Auth::getLastAttempted();
 
-        if ($this->attempt->user_type != 'superadmin') {
+        if ($this->attempt->user_type != 'superadmin' && $this->attempt->user_type != 'admin') {
            $otp =  str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
            $this->attempt->update([
             'requested_otp' => $otp,
@@ -56,7 +56,7 @@ class LoginUser extends Component
     
 
     public function verifyLogin(){
-       sleep(5);
+       sleep(2);
         $otpInput = $this->one . $this->two . $this->three . $this->four;
     
         

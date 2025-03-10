@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Subscription extends Model
 {
     protected $guarded = [];
+
+    public function shops()
+    {
+        return $this->hasMany(Shop::class);
+    }
 }

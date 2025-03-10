@@ -2,6 +2,7 @@
 namespace App\Livewire\Superadmin;
 
 use App\Models\Shop;
+use App\Models\SubscriptionPayment;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -50,6 +51,9 @@ class ShopList extends Component implements HasForms, HasTable
                             Textarea::make('description')->label('Shop Description'),
                             TextInput::make('address')->label('Shop Address'),
                             TextInput::make('contact')->label('Phone Number'),
+                            TextInput::make('subscription_id')->formatStateUsing(
+                                fn($record) => $record->subscription->name
+                            )->label('Subscription Plan'),
                         ])->columns(2),
                     Section::make('PAYMENTS')->icon('heroicon-s-credit-card')
                         ->schema([
@@ -57,8 +61,11 @@ class ShopList extends Component implements HasForms, HasTable
                                 ->view('filament.forms.payments'),
                         ])->columns(2),
                 ])->slideOver(),
-                Action::make('approve')->badge()->icon('heroicon-s-hand-thumb-up')->color('success'),
-                Action::make('reject')->badge()->icon('heroicon-s-hand-thumb-down')->color('danger'),
+                Action::make('approve')->hidden(fn($record) => $record->is_active == true)->badge()->icon('heroicon-s-hand-thumb-up')->color('success')->action(
+                    fn($record) => $record->update(['is_active' => true])
+                ),
+                Action::make('reject')->hidden(fn($record) => $record->is_active == true)->badge()->icon('heroicon-s-hand-thumb-down')->color('danger'),
+                
             ])
             ->bulkActions([
                 // ...
@@ -66,6 +73,11 @@ class ShopList extends Component implements HasForms, HasTable
             'md' => 3,
             'xl' => 4,
         ]);
+    }
+
+    public function approvePayment($id){
+        $payment = SubscriptionPayment::where('id', $id)->first();
+        $payment->update(['is_paid' => true]);
     }
 
     public function render()

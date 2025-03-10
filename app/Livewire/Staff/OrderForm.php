@@ -99,7 +99,7 @@ class OrderForm extends Component implements HasForms
             ]);
     }
 
-    public function saveOrder(){
+    public function saveOrder($total){
        foreach ($this->newItems as $key => $value) {
         $catalog = CatalogService::where('id', $value['service'])->first();
         TransactionOrderForm::create([
@@ -116,6 +116,7 @@ class OrderForm extends Component implements HasForms
         'service_transaction_id' => $this->order_id,
         'reference_number' => Carbon::parse(now())->format('ymd'). '0'.$this->order_id,
         'estimated_time' => Carbon::parse($this->estimated_time),
+        'total_amount' => $total,
        ]);
 
        $this->order->update([

@@ -25,6 +25,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_approved',
         'requested_otp',
         'email_verified_at',
+        'profile_photo'
     ];
 
     /**
@@ -66,5 +67,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function serviceTransactions(){
         return $this->hasMany(ServiceTransaction::class);
+    }
+
+    public function paymentMethod(){
+        return $this->hasOne(PaymentMethod::class);
     }
 }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('service_transaction_id');
             $table->string('reference_number')->unique();
+            $table->double('total_amount');
             $table->time('estimated_time');
             $table->string('proof_of_payment')->nullable();
             $table->longText('comment')->nullable();

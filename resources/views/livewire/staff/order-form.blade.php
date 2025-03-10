@@ -67,8 +67,9 @@
 
 
             <div class="mt-5">
-                <x-button label="Save Order Form" wire:click="saveOrder" spinner="saveOrder"
-                    class="w-full uppercase font-semibold" right-icon="arrow-right" positive />
+                <x-button label="Save Order Form" wire:click="saveOrder({{$subtotal}})"
+                    spinner="saveOrder({{$subtotal}})" class="w-full uppercase font-semibold" right-icon="arrow-right"
+                    positive />
             </div>
         </div>
 
