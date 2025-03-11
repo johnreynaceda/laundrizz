@@ -36,8 +36,8 @@
                 @php
                     $image = \App\Models\PaymentMethod::where('user_id', 1)->first();
                 @endphp
-                @if ($image->count() > 0)
-                    <img src="{{Storage::url($image->payment_photo)}}" alt="QR Code" class="rounded-lg w-full">
+                @if ($image)
+                    <img src="{{ Storage::url($image->payment_photo) }}" alt="QR Code" class="rounded-lg w-full">
                 @else
                     <p class="text-gray-700 text-sm md:text-base italic">
                         Please contact the administration to update their payment method.
