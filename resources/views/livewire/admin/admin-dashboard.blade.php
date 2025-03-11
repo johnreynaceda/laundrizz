@@ -13,7 +13,7 @@
                 <p class="font-semibold text-main text-lg">TOTAL SALES</p>
                 <div class="mt-2">
                     <h1 class="text-5xl font-bold text-gray-600">
-                        &#8369;{{ number_format($sales->sum('total_amount'), 2) }}</h1>
+                        &#8369;{{ number_format($sales ? $sales->sum('total_amount') : 0, 2) }}</h1>
                 </div>
             </div>
             <div class="col-span-2">
@@ -21,7 +21,7 @@
                     <p class="font-semibold text-main text-lg">SALES TODAY</p>
                     <div class="mt-2">
                         <h1 class="text-5xl font-bold text-gray-600">
-                            &#8369;{{ number_format($today->sum('total_amount'), 2) }}</h1>
+                            &#8369;{{ number_format($today ? $today->sum('total_amount') : 0, 2) }}</h1>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,8 @@
                         <div class="flex justify-between items-center">
                             <p class="">Average Order value:</p>
                             <p class="font-semibold text-main text-lg">
-                                &#8369;{{ number_format($sales->sum('total_amount') / $sales->count(), 2) }}</p>
+                                &#8369;{{ number_format($sales && $sales->count() > 0 ? $sales->sum('total_amount') / $sales->count() : 0, 2) }}
+                            </p>
                         </div>
                     </li>
                     <li>
