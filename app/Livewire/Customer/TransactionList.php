@@ -3,7 +3,10 @@
 namespace App\Livewire\Customer;
 
 use App\Models\ServiceTransaction;
+use App\Models\TransactionReport;
 use Carbon\Carbon;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Support\Enums\ActionSize;
@@ -47,13 +50,19 @@ class TransactionList extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-                // Action::make('view')->icon('heroicon-o-eye')->button()->size(ActionSize::Small),
-                // Action::make('view_invoice')->icon('heroicon-o-file-invoice')->url(fn($record) => route('customer.transaction.invoice', $record->id)),
-                // Action::make('cancel_order')->icon('heroicon-o-x')->confirm('Are you sure you want to cancel this order?')
-                //     ->action(function (ServiceTransaction $record) {
-                //         $record->is_cancelled = true;
-                //         $record->save();
-                //     }),
+                Action::make('report')->icon('heroicon-s-flag')->button()->size(ActionSize::Small)->badge()->color('danger')->visible(fn($record) => $record->status == 'Completed')->form([
+                    Textarea::make('comment')->required(),
+                   
+                ])->modalHeading('Send Report')->action(
+                    function($data, $record){
+                        TransactionReport::create([
+                            'service_transaction_id' => $record->id,
+                            'comment' => $data['comment'],
+                        ]);
+                    }
+                ),
+                // Action::make('view_invoice')->icon('heroicon-s-ticket')->button()->size(ActionSize::Small)->badge(),
+                
             ])
             ->bulkActions([
                 // ...

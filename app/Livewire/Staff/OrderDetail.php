@@ -73,7 +73,15 @@ class OrderDetail extends Component
             
         }else{
             dd('not processed');
+      
         }
+    }
+
+    public function rejectPayment(){
+        $this->detail->update([
+            'proof_of_payment' => null,
+            'payment_rejected' => true,
+        ]);
     }
     public function render()
     {

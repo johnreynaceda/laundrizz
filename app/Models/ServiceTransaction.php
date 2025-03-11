@@ -23,4 +23,8 @@ class ServiceTransaction extends Model
     public function transactionOrderForms(){
         return $this->hasMany(TransactionOrderForm::class);
     }
+
+    public function transactionReport(){
+        return $this->hasOne(TransactionReport::class);
+    }
 }

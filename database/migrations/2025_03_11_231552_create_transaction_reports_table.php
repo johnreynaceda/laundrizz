@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('staff', function (Blueprint $table) {
+        Schema::create('transaction_reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('shop_id');
-            $table->foreignId('user_id');
-            $table->string('firstname');
-            $table->string('lastname');
-            $table->string('profile_path')->nullable();
+            $table->foreignId('service_transaction_id');
+            $table->longText('comment');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('staff');
+        Schema::dropIfExists('transaction_reports');
     }
 };

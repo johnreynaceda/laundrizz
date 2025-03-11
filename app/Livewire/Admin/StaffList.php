@@ -8,6 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -45,6 +46,8 @@ class StaffList extends Component implements HasForms, HasTable
                     Staff::create([
                         'shop_id' => auth()->user()->shop->id,
                         'user_id' => $user->id,
+                        'firstname' => $data['firstname'],
+                        'lastname' => $data['lastname'],
                     ]);
                 }
             )->modalWidth('xl'),
@@ -57,7 +60,48 @@ class StaffList extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-                EditAction::make('edit')->color('success'),
+                EditAction::make('edit')
+                    ->color('success')
+                    ->form(fn(Staff $record) => [
+                        Grid::make(2)->schema([
+                            TextInput::make('firstname')
+                                ->default($record->firstname)
+                                ->required(),
+                            TextInput::make('lastname')
+                                ->default($record->lastname)
+                                ->required(),
+                                TextInput::make('email')
+                                ->email()
+                                ->required()
+                                ->live()
+                                ->afterStateHydrated(fn ($state, callable $set) => $set('email', $state ?? $record->user->email)),
+                            TextInput::make('password')
+                                ->password()
+                                ->nullable(),
+                        ]),
+                    ])
+                    ->action(function (Staff $record, array $data) {
+                        // Update User model
+                        $record->user->update([
+                            'name'  => $data['firstname'] . ' ' . $data['lastname'],
+                            'email' => $data['email'],
+                        ]);
+
+                        // Update password only if provided
+                        if (!empty($data['password'])) {
+                            $record->user->update([
+                                'password' => bcrypt($data['password']),
+                            ]);
+                        }
+
+                        // Update Staff model
+                        $record->update([
+                            'firstname' => $data['firstname'],
+                            'lastname'  => $data['lastname'],
+                        ]);
+                    })
+                    ->modalWidth('xl'),
+                    DeleteAction::make('delete')
             ])
             ->bulkActions([
                 // ...

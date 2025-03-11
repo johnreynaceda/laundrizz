@@ -61,6 +61,9 @@ Route::prefix('admin')->middleware(['auth', 'verified', ShopSetup::class])
         Route::get('/staff', function () {
             return view('admin.staff');
         })->name('admin.staff');
+        Route::get('/transactions', function () {
+            return view('admin.transactions');
+        })->name('admin.transactions');
 
     });
 Route::get('/admin/account-setup', function () {

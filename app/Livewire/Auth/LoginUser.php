@@ -37,7 +37,7 @@ class LoginUser extends Component
         if (Auth::validate(['email' => $this->email, 'password' => $this->password])) {
             $this->attempt = Auth::getLastAttempted();
 
-        if ($this->attempt->user_type != 'superadmin' && $this->attempt->user_type != 'admin') {
+        if ($this->attempt->user_type == 'customer') {
            $otp =  str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
            $this->attempt->update([
             'requested_otp' => $otp,

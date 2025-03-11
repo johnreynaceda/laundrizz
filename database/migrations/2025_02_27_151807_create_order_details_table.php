@@ -18,6 +18,7 @@ return new class extends Migration
             $table->double('total_amount');
             $table->time('estimated_time');
             $table->string('proof_of_payment')->nullable();
+            $table->boolean('payment_rejected')->default(false);
             $table->longText('comment')->nullable();
             $table->string('order_type')->nullable();
             $table->boolean('is_paid')->default(false);

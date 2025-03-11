@@ -35,7 +35,7 @@ class RegisterUser extends Component implements HasForms
         sleep(2);
         $this->validate([
             'name' =>'required',
-            'email' =>'required',
+            'email' =>'required|email|unique:users,email',
             'password' => 'required',
             'confirm_password' => 'required'
         ]);

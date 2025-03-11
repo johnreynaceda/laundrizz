@@ -107,6 +107,7 @@ class TransactionStatus extends Component implements HasForms
             foreach ($this->payment as $key => $value) {
                $this->order->orderDetail->update([
                 'proof_of_payment' => $value->store('Payment', 'public'),
+                'payment_rejected' => false
                ]);
             }
             $this->payment_modal = false;

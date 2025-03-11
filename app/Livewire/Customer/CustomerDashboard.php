@@ -13,8 +13,14 @@ class CustomerDashboard extends Component
     public $selected_option;
 
     public function selectLaundry($laundry_id){
-        $this->selected_laundry = $laundry_id;
+        if (auth()->user()->locations->where('is_default', true)->count() > 0) {
+            $this->selected_laundry = $laundry_id;
         $this->option_modal = true;
+        }else{
+            sweetalert()->error('Please setup your location first. Make sure to set a default location.');
+        }
+
+        
     }
 
     public function selectOption($option){
