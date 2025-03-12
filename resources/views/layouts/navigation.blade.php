@@ -137,48 +137,20 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                {{-- <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown> --}}
                 <div x-data="{
                     dropdownOpen: false
                 }" class="relative">
 
                     <button @click="dropdownOpen=true"
                         class="inline-flex items-center justify-center h-12 py-2 pl-3 pr-12 text-sm font-medium transition-colors bg-white border rounded-md text-neutral-700 hover:bg-neutral-100 active:bg-white focus:bg-white focus:outline-none disabled:opacity-50 disabled:pointer-events-none">
-                        <img src="https://cdn.devdojo.com/images/may2023/adam.jpeg"
-                            class="object-cover w-8 h-8 border rounded-full border-neutral-200" />
+                        @if (auth()->user()->profile_photo == null)
+                            <img src="{{ asset('images/no-profile.jpg') }}"
+                                class="object-cover w-8 h-8 border rounded-full border-neutral-200" />
+                        @else
+                            <img src="{{ Storage::url(auth()->user()->profile_photo) }}"
+                                class="object-cover w-8 h-8 border rounded-full border-neutral-200" />
+                        @endif
                         <span class="flex flex-col items-start flex-shrink-0 h-full ml-2 leading-none translate-y-px">
                             <span>{{ auth()->user()->name }}</span>
                             <span
@@ -199,7 +171,7 @@
                             class="p-1 mt-1 bg-white border rounded-md shadow-md border-neutral-200/70 text-neutral-700">
                             <div class="px-2 py-1.5 text-sm font-semibold">My Account</div>
                             <div class="h-px my-1 -mx-1 bg-neutral-200"></div>
-                            <a href="#_"
+                            <a href="{{ route('profile.edit') }}"
                                 class="relative flex cursor-default select-none hover:bg-neutral-100 items-center rounded px-2 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

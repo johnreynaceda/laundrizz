@@ -169,58 +169,112 @@ $estimatedDateTime = \Carbon\Carbon::parse($createdAt->format('Y-m-d') . ' ' . $
                         <h3 class=" font-semibold text-gray-600 ">Payment Processing</h3>
                         <p class="mb-4 text-xs font-normal text-gray-500 dark:text-gray-400">Kindly upload screenshot of
                             payment if you use e-wallet</p>
-                        <div>
-                            <x-button label="UPLOAD HERE" :disabled="$order->orderDetail->proof_of_payment != null"
-                                :slate="$order->orderDetail->proof_of_payment != null" emerald rounded right-icon="photo" xs
-                                class="px-4" @click="modalOpen=true" />
-                        </div>
-                           @if ($order->orderDetail->payment_rejected)
+                        <div class="flex space-x-4 items-start">
+                            <div>
+                                <div>
+                                    <x-button label="UPLOAD HERE" :disabled="$order->orderDetail->proof_of_payment != null"
+                                        :slate="$order->orderDetail->proof_of_payment != null" emerald rounded right-icon="photo" xs
+                                        class="px-4" @click="modalOpen=true" />
+                                </div>
+                                                   @if ($order->orderDetail->payment_rejected)
                             <p class="text-xs text-red-500">Your payment has been rejected. Please check your payment
                                 and try uploading it again.</p>
         @endif
+</div>
+<div>
+    <div x-data="{ open: false }" class="w-full h-full flex justify-center items-center">
+        <!-- Button to trigger modal -->
+        <button @click="open = true"
+            class="w-8 h-8 border-2 rounded-xl grid place-content-center transition-all duration-200 hover:border-gray-700 hover:scale-90 hover:text-green-600 dark:hover:border-gray-500 dark:hover:text-green-400"
+            aria-label="QR Code">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-qr-code">
+                <rect width="5" height="5" x="3" y="3" rx="1" />
+                <rect width="5" height="5" x="16" y="3" rx="1" />
+                <rect width="5" height="5" x="3" y="16" rx="1" />
+                <path d="M21 16h-3a2 2 0 0 0-2 2v3" />
+                <path d="M21 21v.01" />
+                <path d="M12 7v3a2 2 0 0 1-2 2H7" />
+                <path d="M3 12h.01" />
+                <path d="M12 3h.01" />
+                <path d="M12 16v.01" />
+                <path d="M16 12h1" />
+                <path d="M21 12v.01" />
+                <path d="M12 21v-1" />
+            </svg>
+        </button>
 
-        </li>
-        @if ($order->orderDetail->is_processing)
-            <li class="mb-3 ms-4">
-                <div class="absolute w-3 h-3 bg-yellow-500 rounded-full mt-1.5 -start-1.5 border border-yellow-500  ">
+        <!-- Modal -->
+        <div>
+            <div x-show="open" class="fixed z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <div class="bg-white p-5 rounded-xl shadow-lg max-w-md relative">
+                    <!-- Close Button -->
+                    <button @click="open = false"
+                        class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl font-bold">
+                        ×
+                    </button>
+
+                    @php
+                        $image = \App\Models\PaymentMethod::where('shop_id', $order->shop_id)->first();
+                    @endphp
+                    @if ($image)
+                        <img src="{{ Storage::url($image->payment_photo) }}" alt="QR Code"
+                            class="rounded-lg w-full h-96">
+                    @else
+                        <p class="text-gray-700 text-sm md:text-base italic">
+                            Please contact the administration to update their payment method.
+                        </p>
+                    @endif
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <h3 class=" font-semibold text-gray-600 ">Order Processing</h3>
-                <p class="mb-4 text-xs font-normal text-gray-500 dark:text-gray-400">The seller begins processing
-                    the order.</p>
-            </li>
-        @endif
-        @if ($order->orderDetail->is_ready)
-            <li class="mb-3 ms-4">
-                <div class="absolute w-3 h-3 bg-yellow-500 rounded-full mt-1.5 -start-1.5 border border-yellow-500  ">
-                </div>
 
-                <h3 class=" font-semibold text-gray-600 ">Ready For Pickup / Delivery</h3>
-                <p class="mb-4 text-xs font-normal text-gray-500 dark:text-gray-400">The ordered items are securely
-                    packaged.</p>
-                <div class="flex space-x-3">
-                    <button wire:click="pickUp" :disabled="$order - > orderDetail - > order_type != null"
-                        class="{{ $order->orderDetail->order_type == 'Pick Up' ? 'bg-main text-white' : '' }} text-sm font-medium text-gray-600 px-3 py-1 border rounded">PICK
-                        UP</button>
-                    <button wire:click="deliver" :disabled="$order - > orderDetail - > order_type != null"
-                        class="{{ $order->orderDetail->order_type == 'Deliver' ? 'bg-main text-white' : '' }} text-sm font-medium text-gray-600 px-3 py-1 border rounded">DELIVER</button>
+</li>
+@if ($order->orderDetail->is_processing)
+    <li class="mb-3 ms-4">
+        <div class="absolute w-3 h-3 bg-yellow-500 rounded-full mt-1.5 -start-1.5 border border-yellow-500  ">
+        </div>
 
-                </div>
-            </li>
-        @endif
-        @if ($order->orderDetail->is_complete)
-            <li class="mb-3 ms-4">
-                <div class="absolute w-3 h-3 bg-yellow-500 rounded-full mt-1.5 -start-1.5 border border-yellow-500  ">
-                </div>
+        <h3 class=" font-semibold text-gray-600 ">Order Processing</h3>
+        <p class="mb-4 text-xs font-normal text-gray-500 dark:text-gray-400">The seller begins processing
+            the order.</p>
+    </li>
+@endif
+@if ($order->orderDetail->is_ready)
+    <li class="mb-3 ms-4">
+        <div class="absolute w-3 h-3 bg-yellow-500 rounded-full mt-1.5 -start-1.5 border border-yellow-500  ">
+        </div>
 
-                <h3 class=" font-semibold text-gray-600 ">Order Complete</h3>
-                <p class="mb-4 text-xs font-normal text-gray-500 dark:text-gray-400">The packaged items are handed
-                    to the courier.</p>
-                <x-textarea label="" placeholder="write your comment" wire:model="comment" class="text-xs" />
-                <x-button label="Send" wire:click="sendComment" spinner="sendComment" slate xs class="mt-2 " />
-            </li>
-        @endif
-        </ol>
+        <h3 class=" font-semibold text-gray-600 ">Ready For Pickup / Delivery</h3>
+        <p class="mb-4 text-xs font-normal text-gray-500 dark:text-gray-400">The ordered items are securely
+            packaged.</p>
+        <div class="flex space-x-3">
+            <button wire:click="pickUp" :disabled="$order - > orderDetail - > order_type != null"
+                class="{{ $order->orderDetail->order_type == 'Pick Up' ? 'bg-main text-white' : '' }} text-sm font-medium text-gray-600 px-3 py-1 border rounded">PICK
+                UP</button>
+            <button wire:click="deliver" :disabled="$order - > orderDetail - > order_type != null"
+                class="{{ $order->orderDetail->order_type == 'Deliver' ? 'bg-main text-white' : '' }} text-sm font-medium text-gray-600 px-3 py-1 border rounded">DELIVER</button>
+
+        </div>
+    </li>
+@endif
+@if ($order->orderDetail->is_complete)
+    <li class="mb-3 ms-4">
+        <div class="absolute w-3 h-3 bg-yellow-500 rounded-full mt-1.5 -start-1.5 border border-yellow-500  ">
+        </div>
+
+        <h3 class=" font-semibold text-gray-600 ">Order Complete</h3>
+        <p class="mb-4 text-xs font-normal text-gray-500 dark:text-gray-400">The packaged items are handed
+            to the courier.</p>
+        <x-textarea label="" placeholder="write your comment" wire:model="comment" class="text-xs" />
+        <x-button label="Send" wire:click="sendComment" spinner="sendComment" slate xs class="mt-2 " />
+    </li>
+@endif
+</ol>
 </div>
 @if ($order->orderDetail->is_complete)
     <div class="mt-5 border-t flex justify-center pt-5">
@@ -308,7 +362,8 @@ $estimatedDateTime = \Carbon\Carbon::parse($createdAt->format('Y-m-d') . ' ' . $
                         <p class="mb-4 text-xs font-normal text-gray-500 dark:text-gray-400">Your Driver is getting
                             ready to go to your location</p>
                         <div>
-                            <x-button label="CANCEL" negative rounded xs class="px-4" />
+                            <x-button label="CANCEL" wire:click="cancelTransaction({{ $order->id }})" negative
+                                rounded xs class="px-4" />
                         </div>
                     </li>
                 @endif

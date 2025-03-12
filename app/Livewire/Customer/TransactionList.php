@@ -31,20 +31,24 @@ class TransactionList extends Component implements HasForms, HasTable
             ->columns([
                 Split::make([
                     TextColumn::make('created_at')
-                    ->formatStateUsing(fn($record) => 
-                        'ORDER #' . $record->id .  '  |  ' . 
-                        Carbon::parse($record->created_at)->format('h:i A') . ' - ' . 
-                        Carbon::parse($record->created_at)->format('F d, Y')
-                    )
-                    ->html(),
+                        ->formatStateUsing(
+                            fn($record) =>
+                            'ORDER #' . $record->id . '  |  ' .
+                            Carbon::parse($record->created_at)->format('h:i A') . ' - ' .
+                            Carbon::parse($record->created_at)->format('F d, Y')
+                        )
+                        ->html(),
                     TextColumn::make('serviceType.name')->badge()->icon('heroicon-s-tag'),
-                    TextColumn::make('status')->badge()->color(fn (string $state): string => match ($state) {
-                        'pending' => 'warning',
-                        'Completed' => 'success',
-                        'placed order' => 'info',
-                        'accepted' => 'success',
-                    }),
-                   ])->from('md')
+                    TextColumn::make('status')->formatStateUsing(
+                        fn($record) => ucfirst($record->status)
+                    )->badge()->color(fn(string $state): string => match ($state) {
+                            'pending' => 'warning',
+                            'Completed' => 'success',
+                            'placed order' => 'info',
+                            'accepted' => 'success',
+                            'cancelled' => 'danger',
+                        }),
+                ])->from('md')
             ])
             ->filters([
                 // ...
@@ -52,23 +56,23 @@ class TransactionList extends Component implements HasForms, HasTable
             ->actions([
                 Action::make('report')->icon('heroicon-s-flag')->button()->size(ActionSize::Small)->badge()->color('danger')->visible(fn($record) => $record->status == 'Completed')->form([
                     Textarea::make('comment')->required(),
-                   
+
                 ])->modalHeading('Send Report')->action(
-                    function($data, $record){
-                        TransactionReport::create([
-                            'service_transaction_id' => $record->id,
-                            'comment' => $data['comment'],
-                        ]);
-                    }
-                ),
+                        function ($data, $record) {
+                            TransactionReport::create([
+                                'service_transaction_id' => $record->id,
+                                'comment' => $data['comment'],
+                            ]);
+                        }
+                    ),
                 // Action::make('view_invoice')->icon('heroicon-s-ticket')->button()->size(ActionSize::Small)->badge(),
-                
+
             ])
             ->bulkActions([
                 // ...
             ]);
     }
-    
+
     public function render()
     {
         return view('livewire.customer.transaction-list');

@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="pt-5 px-2">
-        <x-button label="Back" href="{{route('dashboard')}}" squared slate outline class="font-semibold"
+    <div class="pt-5 max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6 px-2">
+        <x-button label="Back" href="{{ route('dashboard') }}" squared slate outline class="font-semibold"
             icon="arrow-left" />
     </div>
     <div class="py-5">

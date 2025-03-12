@@ -31,99 +31,116 @@ class TransactionStatus extends Component implements HasForms
     {
         return $form
             ->schema([
-               FileUpload::make('payment')->label('')
+                FileUpload::make('payment')->label('')
             ]);
     }
 
-    public function pickUp(){
+    public function pickUp()
+    {
         $this->order->orderDetail->update([
             'order_type' => 'Pick Up',
         ]);
     }
-    public function deliver(){
+    public function deliver()
+    {
         $this->order->orderDetail->update([
             'order_type' => 'Deliver',
         ]);
 
-        
+
     }
 
-    public function mount(){
-         $data = ServiceTransaction::where('user_id', auth()->user()->id)->where('status', '!=', 'Completed')->get();
+    public function mount()
+    {
+        $data = ServiceTransaction::where('user_id', auth()->user()->id)->where('status', '!=', 'Completed')->where('status', '!=', 'cancelled')->get();
         $this->order = $data->first();
         $this->status = $data;
-        
+
 
         if ($this->status->count() > 0) {
             if ($this->order->is_on_the_way) {
                 $userId = auth()->user()->id;
-            
-                $position = ArrivalQueue::where('id', '<', $userId)->count();
-            
-                // Add ordinal suffix (st, nd, rd, th)
+
+                $position = ArrivalQueue::where('user_id', '<', $userId)->count() + 1;
+
+                // Add ordinal suffix
                 $this->queue = $position . $this->ordinalSuffix($position);
             }
-    
+
             if ($this->order->status == 'placed order') {
                 $this->details = $this->order->transactionOrderForms()
-                ->with(['catalog', 'catalogService']) // Eager load catalog and service
-                ->get()
-                ->groupBy('catalog_id') // Group by catalog_id
-                ->map(function ($items) {
-                    return [
-                        'catalog' => $items->first()->catalog->name ?? '',
-                        'services' => $items->map(function ($item) {
-                            return [
-                                'service' => $item->catalogService->name ?? '',
-                                'quantity' => $item->quantity,
-                                'weight' => $item->weight,
-                                'total' => $item->total,
-                            ];
-                        }),
-                        'subtotal' => $items->sum('total'), // Subtotal per catalog
-                    ];
-                })->values();
-    
+                    ->with(['catalog', 'catalogService']) // Eager load catalog and service
+                    ->get()
+                    ->groupBy('catalog_id') // Group by catalog_id
+                    ->map(function ($items) {
+                        return [
+                            'catalog' => $items->first()->catalog->name ?? '',
+                            'services' => $items->map(function ($item) {
+                                return [
+                                    'service' => $item->catalogService->name ?? '',
+                                    'quantity' => $item->quantity,
+                                    'weight' => $item->weight,
+                                    'total' => $item->total,
+                                ];
+                            }),
+                            'subtotal' => $items->sum('total'), // Subtotal per catalog
+                        ];
+                    })->values();
+
                 $this->comment = $this->order->orderDetail->comment;
             }
-        }else{
-            
+        } else {
+
         }
-        
+
     }
 
-        public function sendComment(){
+    public function sendComment()
+    {
+        $this->order->orderDetail->update([
+            'comment' => $this->comment
+        ]);
+        $this->order->update([
+            'status' => 'Completed',
+        ]);
+
+        return redirect()->route('customer.status');
+    }
+
+    public function uploadPayment()
+    {
+        foreach ($this->payment as $key => $value) {
             $this->order->orderDetail->update([
-                'comment' => $this->comment
-               ]);
-            $this->order->update([
-                'status' => 'Completed',
-            ]);
-
-            return redirect()->route('customer.status');
-        }
-
-        public function uploadPayment(){
-            foreach ($this->payment as $key => $value) {
-               $this->order->orderDetail->update([
                 'proof_of_payment' => $value->store('Payment', 'public'),
                 'payment_rejected' => false
-               ]);
-            }
-            $this->payment_modal = false;
+            ]);
         }
-
-        private function ordinalSuffix($number)
-{
-    if (!in_array(($number % 100), [11, 12, 13])) {
-        switch ($number % 10) {
-            case 1: return 'st';
-            case 2: return 'nd';
-            case 3: return 'rd';
-        }
+        $this->payment_modal = false;
     }
-    return 'th';
-}
+
+    private function ordinalSuffix($number)
+    {
+        if (!in_array($number % 100, [11, 12, 13])) {
+            switch ($number % 10) {
+                case 1:
+                    return 'st';
+                case 2:
+                    return 'nd';
+                case 3:
+                    return 'rd';
+            }
+        }
+        return 'th';
+    }
+
+    public function cancelTransaction($id)
+    {
+        $data = ServiceTransaction::where('id', $id)->first();
+        $data->update([
+            'status' => 'cancelled',
+        ]);
+        return redirect()->route('customer.status');
+    }
 
     public function render()
     {
