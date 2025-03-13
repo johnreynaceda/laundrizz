@@ -56,15 +56,15 @@
                             </a>
                             <div
                                 class="flex flex-col items-start justify-center w-full space-x-6 text-center lg:space-x-8 md:w-2/3 md:mt-0 md:flex-row md:items-center">
-                                <a href="#_"
+                                <a href="{{ route('customer.index') }}"
                                     class="inline-block w-full py-2 mx-0 ml-6 font-medium text-left text-black md:ml-0 md:w-auto md:px-0 md:mx-2 lg:mx-3 md:text-center">Home</a>
-                                <a href="#_"
+                                <a href="{{ route('customer.status') }}"
                                     class="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-black lg:mx-3 md:text-center">Order
                                     Status</a>
-                                <a href="#_"
+                                <a href="{{ route('customer.transaction') }}"
                                     class="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-black lg:mx-3 md:text-center">Transaction
                                     History</a>
-                                <a href="#_"
+                                <a href="{{ route('profile.edit') }}"
                                     class="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-black lg:mx-3 md:text-center">Profile</a>
                                 <a href="#_"
                                     class="absolute top-0 left-0 hidden py-2 mt-6 ml-10 mr-2 text-gray-600 lg:inline-block md:mt-0 md:ml-2 lg:mx-3 md:relative">

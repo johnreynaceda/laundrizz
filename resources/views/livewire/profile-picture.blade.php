@@ -2,7 +2,7 @@
     <div class="text-center">
         <div>
             @if (auth()->user()->profile_photo == null)
-                <img src="{{asset('images/no-profile.jpg')}}" alt="Profile Picture"
+                <img src="{{ asset('images/no-profile.jpg') }}" alt="Profile Picture"
                     class="rounded-full w-32 h-32 mx-auto border-4 border-main mb-4 transition-transform duration-300 hover:scale-105 ring ring-gray-300">
             @else
                 @if ($profile)
@@ -27,9 +27,5 @@
                 </svg>
             </label>
         </div>
-        {{-- <button
-            class="bg-main text-white px-4 py-2 rounded-lg hover:bg-main transition-colors duration-300 ring ring-gray-300 hover:ring-green-700">
-            Change Profile Picture
-        </button> --}}
     </div>
 </div>

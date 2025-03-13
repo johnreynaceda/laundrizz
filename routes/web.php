@@ -47,6 +47,9 @@ Route::prefix('superadmin')->middleware(['auth', 'verified'])
         Route::get('/payments', function () {
             return view('superadmin.payments');
         })->name('superadmin.payments');
+        Route::get('/support', function () {
+            return view('superadmin.support');
+        })->name('superadmin.support');
     });
 
 Route::prefix('admin')->middleware(['auth', 'verified', ShopSetup::class])
@@ -64,6 +67,9 @@ Route::prefix('admin')->middleware(['auth', 'verified', ShopSetup::class])
         Route::get('/transactions', function () {
             return view('admin.transactions');
         })->name('admin.transactions');
+        Route::get('/support', function () {
+            return view('admin.support');
+        })->name('admin.support');
 
     });
 Route::get('/admin/account-setup', function () {
@@ -81,7 +87,7 @@ Route::prefix('customer')->middleware(['auth', 'verified'])
         Route::get('/transactions', function () {
             return view('customer.transaction');
         })->name('customer.transaction');
-        
+
         Route::get('/status', function () {
             return view('customer.order-status');
         })->name('customer.status');
@@ -102,7 +108,7 @@ Route::prefix('staff')->middleware(['auth', 'verified'])
         Route::get('/order-detail/{id}', function () {
             return view('staff.order-detail');
         })->name('staff.order-detail');
-       
+
     });
 
 Route::middleware('auth')->group(function () {

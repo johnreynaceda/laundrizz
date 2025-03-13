@@ -14,7 +14,7 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-5 sm:-my-px sm:ms-10 sm:flex">
                     @switch(auth()->user()->user_type)
                         @case('superadmin')
                             <x-nav-link :href="route('superadmin.index')" :active="request()->routeIs('superadmin.index')">
@@ -70,6 +70,16 @@
                                 </svg>
                                 {{ __('Payments') }}
                             </x-nav-link>
+                            <x-nav-link :href="route('superadmin.support')" :active="request()->routeIs('superadmin.support')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-message-circle-question mr-1">
+                                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                    <path d="M12 17h.01" />
+                                </svg>
+                                {{ __('Support') }}
+                            </x-nav-link>
                         @break
 
                         @case('admin')
@@ -114,6 +124,16 @@
                                     <path d="m9 18 3-3-3-3" />
                                 </svg>
                                 {{ __('Transactions') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.support')" :active="request()->routeIs('admin.support')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-message-circle-question mr-1">
+                                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                    <path d="M12 17h.01" />
+                                </svg>
+                                {{ __('Support') }}
                             </x-nav-link>
                         @break
 

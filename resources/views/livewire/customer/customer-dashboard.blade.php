@@ -27,15 +27,12 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-10" x-data="{ modalOpen: @entangle('option_modal') }"
-                @keydown.escape.window="modalOpen = false">
+            <div class="mt-10" x-data="{ modalOpen: @entangle('option_modal') }" @keydown.escape.window="modalOpen = false">
                 <h1 class="text-lg text-gray-600">Select Laundry Shop</h1>
                 <div class="mt-3">
-
-                    <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" slides-per-view="2"
-                        space-between="10" free-mode="true">
+                    <div class="grid grid-cols-2 2xl:grid-cols-7 gap-5">
                         @forelse (\App\Models\Shop::where('is_active', true)->get() as $item)
-                            <swiper-slide>
+                            <div>
                                 <div wire:click="selectLaundry({{ $item->id }})"
                                     class="w-40 h-40 border rounded-3xl overflow-hidden bg-gradient-to-tr from-main via-main to-white relative">
                                     <img src="{{ Storage::url($item->image_path) }}"
@@ -44,23 +41,14 @@
                                         <p class="font-bold">{{ $item->name }}</p>
                                     </div>
                                 </div>
-                            </swiper-slide>
+                            </div>
                         @empty
                             <p>No Laundry Shops Available</p>
                         @endforelse
-
-                    </swiper-container>
+                    </div>
                 </div>
                 <div class="mt-10">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque vitae dolor repellendus
-                    tempora sit quae reprehenderit deleniti aut temporibus. Quis molestias iure quia sequi ex
-                    libero repellendus assumenda adipisci pariatur, impedit illum omnis facilis odio enim
-                    dolorem molestiae in. Odio quidem aperiam explicabo, voluptas possimus inventore facere
-                    praesentium, rerum optio officia nihil dolore reiciendis veniam ducimus nam consequatur amet
-                    nulla tempore impedit, incidunt excepturi vel vitae! Commodi quae optio quaerat in iusto
-                    esse, obcaecati fugiat quidem. Totam quibusdam autem enim, blanditiis magni nihil
-                    exercitationem, molestias deserunt iste ad non provident, sint labore eveniet modi soluta
-                    doloribus officiis. Ea, perferendis voluptate?
+
                 </div>
                 <div class="relative z-50 w-auto h-auto">
                     <template x-teleport="body">
