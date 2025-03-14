@@ -4,6 +4,7 @@ namespace App\Livewire\Customer;
 
 use App\Models\ArrivalQueue;
 use App\Models\ServiceTransaction;
+use Carbon\Carbon;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\MarkdownEditor;
@@ -12,6 +13,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
+use function Flasher\SweetAlert\Prime\sweetalert;
 
 class TransactionStatus extends Component implements HasForms
 {
@@ -55,6 +57,19 @@ class TransactionStatus extends Component implements HasForms
         $data = ServiceTransaction::where('user_id', auth()->user()->id)->where('status', '!=', 'Completed')->where('status', '!=', 'cancelled')->get();
         $this->order = $data->first();
         $this->status = $data;
+
+        // if ($data->isNotEmpty()) {
+        //     if (Carbon::parse($this->order->orderDetail->estimated_time)->isPast()) {
+        //         if ($this->order->orderDetail->is_paid != true) {
+        //             sweetalert()->error("This order is already due and no payment recorded");
+        //             $this->order->update([
+        //                 'status' => 'cancelled',
+        //             ]);
+        //         } else {
+
+        //         }
+        //     }
+        // }
 
 
         if ($this->status->count() > 0) {
@@ -104,6 +119,8 @@ class TransactionStatus extends Component implements HasForms
             'status' => 'Completed',
         ]);
 
+        sweetalert()->success('Comment Sucessfully sent to the merchant');
+
         return redirect()->route('customer.status');
     }
 
@@ -131,6 +148,15 @@ class TransactionStatus extends Component implements HasForms
             }
         }
         return 'th';
+    }
+
+    public function markAsExpired()
+    {
+        $this->order->update([
+            'status' => 'cancelled',
+        ]);
+        sweetalert()->error('Your order has been expired without payment confirmation. This order will be known as cancelled.');
+        return redirect()->route('customer.status');
     }
 
     public function cancelTransaction($id)

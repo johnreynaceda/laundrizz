@@ -3,6 +3,7 @@
 namespace App\Livewire\Staff;
 
 use App\Models\ServiceTransaction;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class OrderDetail extends Component
@@ -10,74 +11,94 @@ class OrderDetail extends Component
     public $transaction;
     public $detail;
     public $details;
-    public function mount(){
+
+    public $estimated_time;
+
+    public function mount()
+    {
         $id = ServiceTransaction::where('id', request('id'))->first();
         $this->detail = $id->orderDetail;
-
+        $this->estimated_time = Carbon::parse($this->estimated_time)->format('h:i A');
         $this->transaction = $id;
-        
+
+
+
         $this->details = $id->transactionOrderForms()
-        ->with(['catalog', 'catalogService']) // Eager load catalog and service
-        ->get()
-        ->groupBy('catalog_id') // Group by catalog_id
-        ->map(function ($items) {
-            return [
-                'catalog' => $items->first()->catalog->name ?? '',
-                'services' => $items->map(function ($item) {
-                    return [
-                        'service' => $item->catalogService->name ?? '',
-                        'quantity' => $item->quantity,
-                        'weight' => $item->weight,
-                        'total' => $item->total,
-                    ];
-                }),
-                'subtotal' => $items->sum('total'), // Subtotal per catalog
-            ];
-        })->values();
+            ->with(['catalog', 'catalogService']) // Eager load catalog and service
+            ->get()
+            ->groupBy('catalog_id') // Group by catalog_id
+            ->map(function ($items) {
+                return [
+                    'catalog' => $items->first()->catalog->name ?? '',
+                    'services' => $items->map(function ($item) {
+                        return [
+                            'service' => $item->catalogService->name ?? '',
+                            'quantity' => $item->quantity,
+                            'weight' => $item->weight,
+                            'total' => $item->total,
+                        ];
+                    }),
+                    'subtotal' => $items->sum('total'), // Subtotal per catalog
+                ];
+            })->values();
 
     }
 
-    public function verifyPayment(){
+    public function adjustTime()
+    {
+        $this->detail->update([
+            'estimated_time' => Carbon::parse($this->estimated_time),
+        ]);
+
+        return redirect()->route('staff.order-detail', ['id' => $this->detail->serviceTransaction->id]);
+    }
+
+    public function verifyPayment()
+    {
         if ($this->detail->proof_of_payment != null) {
             $this->detail->update([
                 'is_paid' => true,
             ]);
-        }else{
+        } else {
             dd('no payment');
         }
     }
-    public function orderProcessing(){
+    public function orderProcessing()
+    {
         if ($this->detail->is_paid) {
             $this->detail->update([
                 'is_processing' => true,
             ]);
-        }else{
+        } else {
             dd('not paid');
         }
     }
-    public function markReady(){
+    public function markReady()
+    {
         if ($this->detail->is_processing) {
             $this->detail->update([
                 'is_ready' => true,
             ]);
-        }else{
+        } else {
             dd('not processed');
         }
     }
 
-    public function completed(){
+    public function completed()
+    {
         if ($this->detail->is_ready) {
             $this->detail->update([
                 'is_complete' => true,
             ]);
-            
-        }else{
+
+        } else {
             dd('not processed');
-      
+
         }
     }
 
-    public function rejectPayment(){
+    public function rejectPayment()
+    {
         $this->detail->update([
             'proof_of_payment' => null,
             'payment_rejected' => true,

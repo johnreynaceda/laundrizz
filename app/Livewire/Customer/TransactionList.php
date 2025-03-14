@@ -4,6 +4,7 @@ namespace App\Livewire\Customer;
 
 use App\Models\ServiceTransaction;
 use App\Models\TransactionReport;
+use App\Notifications\InvoiceNotification;
 use Carbon\Carbon;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -54,7 +55,7 @@ class TransactionList extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-                Action::make('report')->icon('heroicon-s-flag')->button()->size(ActionSize::Small)->badge()->color('danger')->visible(fn($record) => $record->status == 'Completed')->form([
+                Action::make('report')->icon('heroicon-s-flag')->hidden(fn($record) => $record->transactionReport)->button()->size(ActionSize::Small)->badge()->color('danger')->visible(fn($record) => $record->status == 'Completed')->form([
                     Textarea::make('comment')->required(),
 
                 ])->modalHeading('Send Report')->action(
@@ -65,7 +66,17 @@ class TransactionList extends Component implements HasForms, HasTable
                             ]);
                         }
                     ),
-                // Action::make('view_invoice')->icon('heroicon-s-ticket')->button()->size(ActionSize::Small)->badge(),
+                Action::make('generate_invoice')->visible(fn($record) => $record->status == 'Completed')->icon('heroicon-s-ticket')->button()->size(ActionSize::Small)->badge()->action(
+                    function ($record) {
+                        $data = $record;
+                        $user = $record->user->name;
+                        $reference = $record->orderDetail->reference_number;
+                        $amount = $record->orderDetail->total_amount;
+
+                        $record->user->notify(new InvoiceNotification($user, $reference, $amount));
+                        sweetalert('Invoice sent to your email address');
+                    }
+                ),
 
             ])
             ->bulkActions([

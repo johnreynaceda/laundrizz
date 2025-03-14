@@ -12,4 +12,9 @@ class Subscription extends Model
     {
         return $this->hasMany(Shop::class);
     }
+
+    public function subscriptionPayments()
+    {
+        return $this->hasMany(SubscriptionPayment::class);
+    }
 }

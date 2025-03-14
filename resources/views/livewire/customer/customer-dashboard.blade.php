@@ -43,7 +43,9 @@
                                 </div>
                             </div>
                         @empty
-                            <p>No Laundry Shops Available</p>
+                            <div class="col-span-2">
+                                <p>No Laundry Shops Available</p>
+                            </div>
                         @endforelse
                     </div>
                 </div>

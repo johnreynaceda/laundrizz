@@ -24,9 +24,10 @@ class PaymentRecord extends Component implements HasForms, HasTable
 
     public $upload_new = false;
 
-    
 
-    public function mount(){
+
+    public function mount()
+    {
 
     }
 
@@ -37,7 +38,14 @@ class PaymentRecord extends Component implements HasForms, HasTable
             ->columns([
                 TextColumn::make('shop.name')->searchable(),
                 TextColumn::make('amount')->searchable(),
-                TextColumn::make('is_paid')->searchable(),
+                TextColumn::make('is_paid')->label('Status')->searchable()->formatStateUsing(
+                    fn($record) => ucfirst($record->is_paid ? 'Paid' : 'Not Paid')
+                )->badge()->colors(
+                        [
+                            'Paid' => 'success',
+                            'Not Paid' => 'warning',
+                        ]
+                    ),
             ])
             ->filters([
                 // ...
@@ -58,19 +66,21 @@ class PaymentRecord extends Component implements HasForms, HasTable
             ]);
     }
 
-    public function uploadPhoto(){
+    public function uploadPhoto()
+    {
         foreach ($this->gcash as $key => $value) {
             PaymentMethod::create([
                 'user_id' => auth()->user()->id,
-                'payment_photo'  => $value->store('GCASH PAYMENT', 'public')
+                'payment_photo' => $value->store('GCASH PAYMENT', 'public')
             ]);
         }
         $this->reset('gcash');
     }
-    public function uploadNew(){
+    public function uploadNew()
+    {
         foreach ($this->gcash as $key => $value) {
             auth()->user()->paymentMethod->update([
-                'payment_photo'  => $value->store('GCASH PAYMENT', 'public')
+                'payment_photo' => $value->store('GCASH PAYMENT', 'public')
             ]);
         }
         $this->reset('gcash');

@@ -190,6 +190,52 @@
                         wire:click="completed" spinner="completed" />
                 </div>
             </div>
+            @if ($detail->is_complete != true)
+                <div class="mt-5">
+                    @php
+                        $time = \Carbon\Carbon::parse($detail->estimated_time)->format('h:i A'); // Example: "09:00 PM"
+                        $createdAt = $detail->created_at; // Example: "2025-03-01 10:00 AM"
+
+                        // Convert the estimated time into Carbon with today's date format
+$estimatedDateTime = \Carbon\Carbon::parse($createdAt->format('Y-m-d') . ' ' . $time);
+
+// If the estimated time already passed, don't add another day
+                        if ($estimatedDateTime->isPast() && $createdAt->format('Y-m-d') == now()->format('Y-m-d')) {
+                            $estimatedDateTime = $estimatedDateTime; // No need to add day
+                        }
+                    @endphp
+
+
+                    <div class="bg-white p-5 rounded-xl">
+                        <h1 class="font-medium border-b text-gray-600">Estimated Time :
+                            <span class="text-main">
+                                {{ \Carbon\Carbon::parse($detail->estimated_time)->format('h:i A') }}</span>
+                        </h1>
+                        <x-countdown :expires="$estimatedDateTime" class="text-gray-600 font-semibold" />
+                        <div class="mt-5">
+                            {{-- <x-button label="Adjust Remaining Time" class="font-medium" xs slate /> --}}
+                            <x-filament::modal width="lg">
+                                <x-slot name="trigger">
+                                    <x-filament::button size="xs" color="gray">
+                                        Adjust Remaining Time
+                                    </x-filament::button>
+                                </x-slot>
+                                <x-slot name="heading">
+                                    Adjust Time Remaining
+                                </x-slot>
+                                <div class="bg-white">
+                                    <x-input type="time" wire:model.live="estimated_time" />
+                                </div>
+                                <x-slot name="footer">
+                                    <x-filament::button size="xs" color="success" wire:click="adjustTime">
+                                        Submit
+                                    </x-filament::button>
+                                </x-slot>
+                            </x-filament::modal>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </div>

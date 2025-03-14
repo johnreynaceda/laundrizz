@@ -54,14 +54,20 @@ class Transaction extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-                Action::make('view_report')->icon('heroicon-s-flag')->button()->size(ActionSize::Small)->badge()->color('warning')->form(
+                Action::make('view_report')->icon('heroicon-s-flag')->button()->size(ActionSize::Small)->badge()->color('warning')->hidden(fn($record) => $record->transactionReport->is_resolved == true)->form(
                     function ($record) {
                         return [
                             Textarea::make('comment')->label('Report')->required()->live()->disabled()
                                 ->afterStateHydrated(fn($state, callable $set) => $set('comment', $state ?? $record->transactionReport->comment)),
                         ];
                     }
-                )->modalWidth('xl')->modalSubmitActionLabel('Resolved Report')->modalHeading('Transaction Report')
+                )->modalWidth('xl')->modalSubmitActionLabel('Resolved Report')->modalHeading('Transaction Report')->action(
+                        function ($record) {
+                            $record->transactionReport->update([
+                                'is_resolved' => true,
+                            ]);
+                        }
+                    )
 
             ])
             ->bulkActions([

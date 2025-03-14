@@ -18,6 +18,7 @@ use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\IconPosition;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\Layout\Grid;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -52,25 +53,44 @@ class ServiceTransactionList extends Component implements HasForms, HasTable
         return $table
             ->query(ServiceTransaction::query()->where('shop_id', auth()->user()->staff->shop_id)->where('service_type_id', $this->service_type_id)->orderByDesc('created_at'))
             ->columns([
-                Split::make([
+                // Split::make([
+                //     TextColumn::make('created_at')->label('PENDING ' . strtoupper($this->service_name) . ' ORDERS')
+                //         ->formatStateUsing(
+                //             fn($record) =>
+                //             'ORDER #' . $record->id . '  |  ' .
+                //             Carbon::parse($record->created_at)->format('h:i A') . ' - ' .
+                //             Carbon::parse($record->created_at)->format('F d, Y')
+                //         )
+                //         ->html(),
+                //     TextColumn::make('status')->formatStateUsing(
+                //         fn($record) => ucfirst($record->status)
+                //     )->badge()->color(fn(string $state): string => match ($state) {
+                //             'pending' => 'warning',
+                //             'accepted' => 'success',
+                //             'Completed' => 'success',
+                //             'placed order' => 'info',
+                //             'cancelled' => 'danger',
+                //         }),
+                // ])->from('md'),
+                Grid::make(2)->schema([
                     TextColumn::make('created_at')->label('PENDING ' . strtoupper($this->service_name) . ' ORDERS')
                         ->formatStateUsing(
                             fn($record) =>
                             'ORDER #' . $record->id . '  |  ' .
                             Carbon::parse($record->created_at)->format('h:i A') . ' - ' .
                             Carbon::parse($record->created_at)->format('F d, Y')
-                        )
-                        ->html(),
+                        ),
                     TextColumn::make('status')->formatStateUsing(
                         fn($record) => ucfirst($record->status)
                     )->badge()->color(fn(string $state): string => match ($state) {
                             'pending' => 'warning',
-                            'accepted' => 'success',
+                            'accepted' => 'info',
                             'Completed' => 'success',
                             'placed order' => 'info',
                             'cancelled' => 'danger',
                         }),
-                ])->from('md'),
+
+                ])
 
             ])
             ->filters([
@@ -119,16 +139,19 @@ class ServiceTransactionList extends Component implements HasForms, HasTable
                     }
                 ),
                 Action::make('order_form')->hidden(
-                    fn($record) => $record->status == 'placed order' || $record->status == 'pending' || $record->status == 'Completed' || $record->status == 'cancelled'
+                    fn($record) => $record->status == 'placed order' || $record->status == 'pending' || $record->status == 'Completed' || $record->status == 'cancelled' || !$record->is_arrived
                 )
                     ->label('Order Form')->button()->size('xs')->icon('heroicon-s-document-text')->iconPosition(IconPosition::After)->url(fn($record) => route('staff.order-form', ['id' => $record->id])),
-                Action::make('order_detail')->label('Order Detail')->visible(
+                Action::make('order_detail')->outlined()->label('Order Detail')->visible(
                     fn($record) => $record->status == 'placed order' || $record->status == 'Completed'
                 )->button()->size('xs')->icon('heroicon-s-ticket')->iconPosition(IconPosition::After)->url(fn($record) => route('staff.order-detail', ['id' => $record->id]))
             ])
             ->bulkActions([
                 // ...
-            ]);
+            ])->contentGrid([
+                    'md' => 3,
+                    'xl' => 4,
+                ]);
     }
 
     public function render()

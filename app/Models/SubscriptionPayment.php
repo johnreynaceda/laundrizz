@@ -11,4 +11,9 @@ class SubscriptionPayment extends Model
     {
         return $this->belongsTo(Shop::class);
     }
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
 }

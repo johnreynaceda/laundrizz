@@ -37,7 +37,8 @@ class RegisterUser extends Component implements HasForms
         $this->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8',
+            'password' => 'required|min:8
+            ',
             'confirm_password' => 'required'
         ]);
 
@@ -46,7 +47,7 @@ class RegisterUser extends Component implements HasForms
             'email' => $this->email,
             'password' => bcrypt($this->password),
             'user_type' => $this->type == 'Merchant' ? 'admin' : 'customer',
-            'is_approved' => $this->type == 'customer' ? true : false
+            'is_approved' => $this->type != 'Merchant' ? true : false
         ]);
 
         event(new Registered($user));

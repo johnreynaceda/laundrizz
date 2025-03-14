@@ -107,6 +107,7 @@ $estimatedDateTime = \Carbon\Carbon::parse($createdAt->format('Y-m-d') . ' ' . $
                         if (distance <= 0) {
                             clearInterval(timer);
                             expired = true;
+                            @this.call('markAsExpired'); // Call Livewire function
                         }
                     }, 1000);">
                         <template x-if="!expired">
@@ -176,9 +177,12 @@ $estimatedDateTime = \Carbon\Carbon::parse($createdAt->format('Y-m-d') . ' ' . $
                                         :slate="$order->orderDetail->proof_of_payment != null" emerald rounded right-icon="photo" xs
                                         class="px-4" @click="modalOpen=true" />
                                 </div>
-                                                   @if ($order->orderDetail->payment_rejected)
-                            <p class="text-xs text-red-500">Your payment has been rejected. Please check your payment
-                                and try uploading it again.</p>
+                                  @if ($order->orderDetail->is_paid == true)
+                            <p class="text-xs pl-3 text-green-500">Verified Payment.</p>
+        @endif
+        @if ($order->orderDetail->payment_rejected)
+            <p class="text-xs text-red-500">Your payment has been rejected. Please check your payment
+                and try uploading it again.</p>
         @endif
 </div>
 <div>
@@ -207,7 +211,8 @@ $estimatedDateTime = \Carbon\Carbon::parse($createdAt->format('Y-m-d') . ' ' . $
 
         <!-- Modal -->
         <div>
-            <div x-show="open" class="fixed z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div x-show="open" x-cloak
+                class="fixed  z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                 <div class="bg-white p-5 rounded-xl shadow-lg max-w-md relative">
                     <!-- Close Button -->
                     <button @click="open = false"

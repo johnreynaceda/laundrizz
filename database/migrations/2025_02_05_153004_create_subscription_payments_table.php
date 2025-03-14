@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,9 +13,11 @@ return new class extends Migration
         Schema::create('subscription_payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('shop_id');
+            $table->foreignId('subscription_id');
             $table->double('amount');
             $table->string('payment_image_path');
             $table->boolean('is_paid')->default(false);
+            $table->boolean('is_expired')->default(false);
             $table->timestamps();
         });
     }

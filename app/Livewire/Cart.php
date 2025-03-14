@@ -17,7 +17,7 @@ use Livewire\Component;
 class Cart extends Component implements HasForms
 {
     use InteractsWithForms;
-    public $image         = [];
+    public $image = [];
     public $payment_image = [], $reference_number;
 
     public $get_subscription;
@@ -61,30 +61,31 @@ class Cart extends Component implements HasForms
     public function applySubscription()
     {
         $this->validate([
-            'image'            => 'required',
-            'name'             => 'required',
-            'description'      => 'required',
-            'address'          => 'required',
-            'phone_number'     => 'required',
-            'payment_image'    => 'required',
+            'image' => 'required',
+            'name' => 'required',
+            'description' => 'required',
+            'address' => 'required',
+            'phone_number' => 'required',
+            'payment_image' => 'required',
             'reference_number' => 'required',
         ]);
 
         foreach ($this->image as $key => $value) {
             $shop = Shop::create([
-                'name'            => $this->name,
-                'description'     => $this->description,
-                'address'         => $this->address,
-                'contact'         => $this->phone_number,
-                'image_path'      => $value->store('Shop', 'public'),
+                'name' => $this->name,
+                'description' => $this->description,
+                'address' => $this->address,
+                'contact' => $this->phone_number,
+                'image_path' => $value->store('Shop', 'public'),
                 'subscription_id' => $this->get_subscription,
-                'user_id'         => auth()->user()->id,
+                'user_id' => auth()->user()->id,
             ]);
 
             foreach ($this->payment_image as $key => $image) {
                 SubscriptionPayment::create([
-                    'shop_id'            => $shop->id,
-                    'amount'             => $this->selected_subscription->amount,
+                    'shop_id' => $shop->id,
+                    'subscription_id' => $this->get_subscription,
+                    'amount' => $this->selected_subscription->amount,
                     'payment_image_path' => $image->store('Payment', 'public'),
                 ]);
             }
