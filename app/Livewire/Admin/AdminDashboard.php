@@ -51,8 +51,6 @@ class AdminDashboard extends Component implements HasForms
         if ($shop) {
             // Find the latest expired subscription for the selected plan
             $previousSubscription = $shop->subscriptionPayments()
-                ->where('subscription_id', $this->selectedSubscriptionId)
-                ->where('is_expired', true)
                 ->latest('updated_at')
                 ->first();
 
@@ -123,6 +121,9 @@ class AdminDashboard extends Component implements HasForms
                 // Mark as expired if needed
                 if (Carbon::now()->greaterThanOrEqualTo($expirationDate)) {
                     $latestSubscription->update(['is_expired' => true]);
+                    $latestSubscription->shop->update([
+                        'is_active' => false,
+                    ]);
                 }
             }
         }

@@ -162,25 +162,33 @@
                                     </div>
                                 @endif
 
-                                @if ($noActiveSubscription || $isLatestExpired)
+                                @php
+                                    // Get the most recent pending payment
+                                    $latestPendingPayment = $userShop
+                                        ? $userShop->subscriptionPayments
+                                            ->where('is_paid', false) // Pending payment only
+                                            ->sortByDesc('updated_at') // Get the most recent one
+                                            ->first()
+                                        : null;
+
+                                    // Check if the current subscription is the one pending approval
+                                    $isWaitingForApproval =
+                                        $latestPendingPayment && $latestPendingPayment->subscription_id == $item->id;
+                                @endphp
+
+                                @if ($isWaitingForApproval)
+                                    <span class="text-yellow-500 font-medium">Waiting for Approval</span>
+                                @elseif (!$latestPendingPayment && ($noActiveSubscription || ($isLatestExpired && !$latestActivePayment)))
                                     <x-button wire:click="confirmRenew({{ $item->id }})" :class="$isLatestExpired ? 'bg-red-500 text-white' : 'bg-green-500 text-white'"
                                         label="{{ $isLatestExpired ? 'Renew Expired Plan' : 'Choose Plan' }}" rounded
                                         sm />
                                 @endif
+
                             </div>
                         </li>
                     @endforeach
                 </ul>
 
-                {{-- Modal --}}
-                <x-modal wire:model="showRenewModal">
-                    <x-slot name="title">Renew Subscription</x-slot>
-                    <p>Are you sure you want to renew this subscription?</p>
-                    <div class="mt-4 flex justify-end space-x-2">
-                        <x-button wire:click="$set('showRenewModal', false)" label="Cancel" />
-                        <x-button wire:click="renewSubscription" positive label="Confirm Renewal" />
-                    </div>
-                </x-modal>
 
             </div>
         </div>

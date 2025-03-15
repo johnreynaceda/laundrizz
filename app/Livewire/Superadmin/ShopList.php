@@ -30,15 +30,15 @@ class ShopList extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Shop::query())->columns([
-            Stack::make([
-                ViewColumn::make('image')->view('filament.tables.shop_image'),
-                TextColumn::make('name')->weight(FontWeight::Bold)->formatStateUsing(
-                    fn($record) => strtoupper($record->name)
-                )->color('success'),
-                TextColumn::make('description'),
-                ViewColumn::make('status')->view('filament.tables.status'),
-            ]),
-        ])
+                    Stack::make([
+                        ViewColumn::make('image')->view('filament.tables.shop_image'),
+                        TextColumn::make('name')->weight(FontWeight::Bold)->formatStateUsing(
+                            fn($record) => strtoupper($record->name)
+                        )->color('success'),
+                        TextColumn::make('description'),
+                        ViewColumn::make('status')->view('filament.tables.status'),
+                    ]),
+                ])
             ->filters([
                 // ...
             ])
@@ -61,23 +61,27 @@ class ShopList extends Component implements HasForms, HasTable
                                 ->view('filament.forms.payments'),
                         ])->columns(2),
                 ])->slideOver(),
-                Action::make('approve')->hidden(fn($record) => $record->is_active == true)->badge()->icon('heroicon-s-hand-thumb-up')->color('success')->action(
-                    fn($record) => $record->update(['is_active' => true])
-                ),
-                Action::make('reject')->hidden(fn($record) => $record->is_active == true)->badge()->icon('heroicon-s-hand-thumb-down')->color('danger'),
-                
+                // Action::make('approve')->hidden(fn($record) => $record->is_active == true)->badge()->icon('heroicon-s-hand-thumb-up')->color('success')->action(
+                //     fn($record) => $record->update(['is_active' => true])
+                // ),
+                // Action::make('reject')->hidden(fn($record) => $record->is_active == true)->badge()->icon('heroicon-s-hand-thumb-down')->color('danger'),
+
             ])
             ->bulkActions([
                 // ...
             ])->contentGrid([
-            'md' => 3,
-            'xl' => 4,
-        ]);
+                    'md' => 3,
+                    'xl' => 4,
+                ]);
     }
 
-    public function approvePayment($id){
+    public function approvePayment($id)
+    {
         $payment = SubscriptionPayment::where('id', $id)->first();
         $payment->update(['is_paid' => true]);
+        $payment->shop->update([
+            'is_active' => true,
+        ]);
     }
 
     public function render()
