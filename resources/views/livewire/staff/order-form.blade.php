@@ -13,7 +13,7 @@
     <div class="mt-3 grid  grid-cols-7 gap-10">
         <div class="2xl:col-span-5 col-span-7">
             <div class="bg-white p-5 rounded-xl">
-                {{$this->form}}
+                {{ $this->form }}
             </div>
         </div>
         <div class="2xl:col-span-2 col-span-7">
@@ -24,27 +24,27 @@
                         $total = 0; // Initialize total amount
                     @endphp
                     @forelse ($newItems as $item)
-                                        @php
-                                            $catalog = \App\Models\Catalog::where('id', ($item['catalog'] ?? 0))->first();
-                                            $service = \App\Models\CatalogService::where('id', ($item['service'] ?? 0))->first();
-                                            $subtotal = ($service->price ?? 0) * ($item['weight'] ?? 0); // Subtotal for each item
-                                            $total += $subtotal; // Add to total
-                                        @endphp
-                                        <div class="border-b">
-                                            <h1>{{ $catalog->name ?? '' }}</h1>
-                                        </div>
-                                        <div class="mt-1 flex justify-between items-center">
-                                            <div class="flex space-x-3">
-                                                <h1>{{ $service->name ?? '' }}</h1>
-                                                <h1>{{ $item['quantity'] ?? '' }}</h1>
-                                            </div>
-                                            <span>{{ ($item['weight'] ?? 0) . 'KG' }}</span>
-                                        </div>
-                                        <div class="mt-1 border-t flex justify-end">
-                                            <h1 class="text-gray-600">
-                                                &#8369;{{ number_format($subtotal, 2) }}
-                                            </h1>
-                                        </div>
+                        @php
+                            $catalog = \App\Models\Catalog::where('id', $item['catalog'] ?? 0)->first();
+                            $service = \App\Models\CatalogService::where('id', $item['service'] ?? 0)->first();
+                            $subtotal = ($service->price ?? 0) * ($item['weight'] ?? 0); // Subtotal for each item
+                            $total += $subtotal; // Add to total
+                        @endphp
+                        <div class="border-b">
+                            <h1>{{ $catalog->name ?? '' }}</h1>
+                        </div>
+                        <div class="mt-1 flex justify-between items-center">
+                            <div class="flex space-x-3">
+                                <h1>{{ $service->name ?? '' }}</h1>
+                                <h1>{{ $item['quantity'] ?? '' }}</h1>
+                            </div>
+                            <span>{{ ($item['weight'] ?? 0) . 'KG' }}</span>
+                        </div>
+                        <div class="mt-1 border-t flex justify-end">
+                            <h1 class="text-gray-600">
+                                &#8369;{{ number_format($subtotal, 2) }}
+                            </h1>
+                        </div>
                     @empty
                         <div>No Items Found</div>
                     @endforelse
@@ -67,9 +67,9 @@
 
 
             <div class="mt-5">
-                <x-button label="Save Order Form" wire:click="saveOrder({{$subtotal}})"
-                    spinner="saveOrder({{$subtotal}})" class="w-full uppercase font-semibold" right-icon="arrow-right"
-                    positive />
+                <x-button label="Save Order Form" wire:click="saveOrder({{ $subtotal }})"
+                    spinner="saveOrder({{ $subtotal }})" class="w-full uppercase font-semibold"
+                    right-icon="arrow-right" positive />
             </div>
         </div>
 

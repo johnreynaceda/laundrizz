@@ -26,36 +26,39 @@ class StaffList extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Staff::query()->where('shop_id', auth()->user()->shop->id))->headerActions([
-            CreateAction::make('new')->label('New Staff')->icon('heroicon-o-plus-circle')->form([
-                Grid::make(2)->schema([
-                    TextInput::make('firstname')->required(),
-                    TextInput::make('lastname')->required(),
-                    TextInput::make('email')->email()->required(),
-                    TextInput::make('password')->password()->required(),
-                ]),
-            ])->action(
-                function ($data) {
-                    $user = User::create([
-                        'name'              => $data['firstname'] . ' ' . $data['lastname'],
-                        'email'             => $data['email'],
-                        'password'          => bcrypt($data['password']),
-                        'email_verified_at' => now(),
-                        'is_approved'       => true,
-                        'user_type'         => 'staff',
-                    ]);
-                    Staff::create([
-                        'shop_id' => auth()->user()->shop->id,
-                        'user_id' => $user->id,
-                        'firstname' => $data['firstname'],
-                        'lastname' => $data['lastname'],
-                    ]);
-                }
-            )->modalWidth('xl'),
-        ])->columns([
-            TextColumn::make('user.name')->label('NAME')->searchable(),
-            TextColumn::make('user.email')->label('EMAIL')->searchable(),
+                    CreateAction::make('new')->label('New Staff')->icon('heroicon-o-plus-circle')->form([
+                        Grid::make(2)->schema([
+                            TextInput::make('firstname')->required(),
+                            TextInput::make('lastname')->required(),
+                            TextInput::make('username')->required(),
+                            // TextInput::make('email')->email()->required(),
+                            TextInput::make('password')->password()->required(),
+                        ]),
+                    ])->action(
+                            function ($data) {
+                                $user = User::create([
+                                    'name' => $data['firstname'] . ' ' . $data['lastname'],
+                                    'email' => $data['username'] . '@gmail.com',
+                                    'username' => $data['username'],
+                                    'password' => bcrypt($data['password']),
+                                    'email_verified_at' => now(),
+                                    'is_approved' => true,
+                                    'user_type' => 'staff',
+                                ]);
+                                Staff::create([
+                                    'shop_id' => auth()->user()->shop->id,
+                                    'user_id' => $user->id,
+                                    'firstname' => $data['firstname'],
+                                    'lastname' => $data['lastname'],
+                                ]);
+                            }
+                        )->modalWidth('xl'),
+                ])->columns([
+                    TextColumn::make('user.name')->label('NAME')->searchable(),
+                    TextColumn::make('user.username')->label('USERNAME')->searchable(),
+                    TextColumn::make('user.email')->label('EMAIL')->searchable(),
 
-        ])
+                ])
             ->filters([
                 // ...
             ])
@@ -70,11 +73,11 @@ class StaffList extends Component implements HasForms, HasTable
                             TextInput::make('lastname')
                                 ->default($record->lastname)
                                 ->required(),
-                                TextInput::make('email')
+                            TextInput::make('email')
                                 ->email()
                                 ->required()
                                 ->live()
-                                ->afterStateHydrated(fn ($state, callable $set) => $set('email', $state ?? $record->user->email)),
+                                ->afterStateHydrated(fn($state, callable $set) => $set('email', $state ?? $record->user->email)),
                             TextInput::make('password')
                                 ->password()
                                 ->nullable(),
@@ -83,7 +86,7 @@ class StaffList extends Component implements HasForms, HasTable
                     ->action(function (Staff $record, array $data) {
                         // Update User model
                         $record->user->update([
-                            'name'  => $data['firstname'] . ' ' . $data['lastname'],
+                            'name' => $data['firstname'] . ' ' . $data['lastname'],
                             'email' => $data['email'],
                         ]);
 
@@ -97,11 +100,11 @@ class StaffList extends Component implements HasForms, HasTable
                         // Update Staff model
                         $record->update([
                             'firstname' => $data['firstname'],
-                            'lastname'  => $data['lastname'],
+                            'lastname' => $data['lastname'],
                         ]);
                     })
                     ->modalWidth('xl'),
-                    DeleteAction::make('delete')
+                DeleteAction::make('delete')
             ])
             ->bulkActions([
                 // ...

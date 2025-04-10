@@ -54,6 +54,12 @@ class ShopList extends Component implements HasForms, HasTable
                             TextInput::make('subscription_id')->formatStateUsing(
                                 fn($record) => $record->subscription->name
                             )->label('Subscription Plan'),
+                            ViewField::make('rating')
+                                ->view('filament.forms.empty'),
+                            ViewField::make('rating')
+                                ->view('filament.forms.business_permit'),
+                            ViewField::make('rating')
+                                ->view('filament.forms.identification'),
                         ])->columns(2),
                     Section::make('PAYMENTS')->icon('heroicon-s-credit-card')
                         ->schema([

@@ -12,11 +12,20 @@ class CustomerDashboard extends Component
     public $selected_laundry;
     public $selected_option;
 
+    public $laundry_name;
+
+    public $pubmats = [];
+
+    public $search;
+
     public function selectLaundry($laundry_id)
     {
         if (auth()->user()->locations->where('is_default', true)->count() > 0) {
             $this->selected_laundry = $laundry_id;
-            $this->option_modal = true;
+            $this->laundry_name = \App\Models\Shop::find($laundry_id)->name;
+            $this->pubmats = \App\Models\ShopPubmat::where('shop_id', $laundry_id)->get();
+            // $this->option_modal = true;
+            $this->dispatch('open-modal', id: 'select-service-type');
         } else {
             sweetalert()->error('Please setup your location first. Make sure to set a default location.');
         }
@@ -47,6 +56,13 @@ class CustomerDashboard extends Component
 
     public function render()
     {
-        return view('livewire.customer.customer-dashboard');
+        return view('livewire.customer.customer-dashboard', [
+            'laundries' => \App\Models\Shop::where('is_active', true)
+                ->when($this->search, function ($query) {
+                    return $query->where('name', 'like', '%' . $this->search . '%');
+                })
+                ->get(),
+
+        ]);
     }
 }

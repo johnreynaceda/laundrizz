@@ -12,7 +12,7 @@
                 <a href="{{ Storage::url($item->payment_image_path) }}" target="_blank"
                     class="w-fit p-3 bg-gray-50 hover:bg-gray-100 rounded-lg flex gap-1 ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="34"
-                        class="{{$item->is_paid == true ? 'text-green-700' : ''}}" height="34" viewBox="0 0 34 34"
+                        class="{{ $item->is_paid == true ? 'text-green-700' : '' }}" height="34" viewBox="0 0 34 34"
                         fill="none">
                         <g id="File">
                             <path id="icon"
@@ -22,13 +22,14 @@
                     </svg>
                     <div class="grid gap-0.5">
                         <div class="text-gray-900 text-xs font-medium leading-4">Proof of Payment</div>
-                        <div class="text-gray-500 text-xs font-normal leading-4">{{ $item->reference_number }}</div>
+                        <div class="text-gray-500 text-xs font-normal leading-4">REF. #:{{ $item->reference_number }}
+                        </div>
                     </div>
                 </a>
                 <div>
                     @if (!$item->is_paid)
                         <x-button label="Approve" 2xs positive right-icon="hand-thumb-up"
-                            wire:click="approvePayment({{$item->id}})" />
+                            wire:click="approvePayment({{ $item->id }})" />
                     @endif
                 </div>
             </div>

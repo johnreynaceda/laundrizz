@@ -20,6 +20,9 @@ class Cart extends Component implements HasForms
     public $image = [];
     public $payment_image = [], $reference_number;
 
+    public $permit = [];
+    public $identification = [];
+
     public $get_subscription;
 
     public $selected_subscription;
@@ -45,6 +48,8 @@ class Cart extends Component implements HasForms
                         TextInput::make('description')->label('Shop Description'),
                         TextInput::make('address')->label('Shop Address'),
                         TextInput::make('phone_number')->label('Phone Number'),
+                        FileUpload::make('permit')->label('Business Permit'),
+                        FileUpload::make('identification')->label('Identification'),
                     ])->columns(2),
                 Section::make('PAYMENT')->icon('heroicon-s-credit-card')
                     ->description('Please upload the payment information')->collapsed()
@@ -60,15 +65,20 @@ class Cart extends Component implements HasForms
 
     public function applySubscription()
     {
+
         $this->validate([
             'image' => 'required',
             'name' => 'required',
             'description' => 'required',
             'address' => 'required',
-            'phone_number' => 'required',
+            'phone_number' => 'required|numeric|digits_between:1,11',
             'payment_image' => 'required',
+            'permit' => 'required',
+            'identification' => 'required',
             'reference_number' => 'required',
         ]);
+
+        $shop = [];
 
         foreach ($this->image as $key => $value) {
             $shop = Shop::create([
@@ -86,10 +96,21 @@ class Cart extends Component implements HasForms
                     'shop_id' => $shop->id,
                     'subscription_id' => $this->get_subscription,
                     'amount' => $this->selected_subscription->amount,
+                    'reference_number' => $this->reference_number,
                     'payment_image_path' => $image->store('Payment', 'public'),
                 ]);
             }
 
+        }
+        foreach ($this->permit as $key => $permit) {
+            $shop->update([
+                'business_permit_path' => $permit->store('Permit', 'public'),
+            ]);
+        }
+        foreach ($this->identification as $key => $identification) {
+            $shop->update([
+                'identification_path' => $identification->store('Identification', 'public'),
+            ]);
         }
 
         return redirect()->route('dashboard');

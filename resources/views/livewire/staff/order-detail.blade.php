@@ -1,6 +1,6 @@
 <div>
-    <div class="grid grid-cols-8 gap-10">
-        <div class="col-span-6">
+    <div class="grid 2xl:grid-cols-8 grid-cols-1 gap-10">
+        <div class="2xl:col-span-6">
             <div class="bg-white border-b px-5 py-3 rounded-xl">
                 <div class="flex flex-col items-center">
                     <h1 class="text-lg font-bold uppercase text-gray-600">Reference Number:
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="mt-5 bg-white p-5 rounded-xl">
-                <div class="px-8">
+                <div class="2xl:px-8">
                     <div class="mb-3 flex gap-2 flex-wrap">
                         @if ($detail->is_paid)
                             <x-badge label="Paid" positive flat />
@@ -103,7 +103,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-5 grid grid-cols-2 gap-10">
+                    <div class="mt-5 grid 2xl:grid-cols-2 gap-10">
                         <div>
                             <div class="">
                                 <h1 class="text-lg font-semibold text-gray-600">Order Type:</h1>
@@ -176,7 +176,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-span-2">
+        <div class="2xl:col-span-2">
             <div class="bg-white p-5 rounded-xl">
                 <h1 class="font-medium border-b text-gray-600">Order Actions</h1>
                 <div class="flex gap-2 mt-3 flex-wrap">

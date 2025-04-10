@@ -76,17 +76,28 @@ class TransactionStatus extends Component implements HasForms
             if ($this->order->is_on_the_way) {
                 $userId = auth()->user()->id;
 
-                $position = ArrivalQueue::where('user_id', '<', $userId)->count() + 1;
+                $queue = ArrivalQueue::where('shop_id', $this->order->shop_id)
+                    ->orderBy('created_at')
+                    ->get();
 
-                // Add ordinal suffix
-                $this->queue = $position . $this->ordinalSuffix($position);
+
+                $position = $queue->search(function ($item) use ($userId) {
+                    return $item->user_id === $userId;
+                });
+
+                if ($position !== false) {
+                    $position += 1;
+                    $this->queue = $position . $this->ordinalSuffix($position);
+                } else {
+                    $this->queue = 'Not in queue';
+                }
             }
 
             if ($this->order->status == 'placed order') {
                 $this->details = $this->order->transactionOrderForms()
-                    ->with(['catalog', 'catalogService']) // Eager load catalog and service
+                    ->with(['catalog', 'catalogService'])
                     ->get()
-                    ->groupBy('catalog_id') // Group by catalog_id
+                    ->groupBy('catalog_id')
                     ->map(function ($items) {
                         return [
                             'catalog' => $items->first()->catalog->name ?? '',
@@ -98,7 +109,7 @@ class TransactionStatus extends Component implements HasForms
                                     'total' => $item->total,
                                 ];
                             }),
-                            'subtotal' => $items->sum('total'), // Subtotal per catalog
+                            'subtotal' => $items->sum('total'),
                         ];
                     })->values();
 

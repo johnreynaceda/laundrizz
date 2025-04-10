@@ -10,15 +10,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('subscription_payments', function (Blueprint $table) {
+        Schema::create('shop_pubmats', function (Blueprint $table) {
             $table->id();
             $table->foreignId('shop_id');
-            $table->foreignId('subscription_id');
-            $table->double('amount');
-            $table->string('payment_image_path');
-            $table->string('reference_number')->nullable();
-            $table->boolean('is_paid')->default(false);
-            $table->boolean('is_expired')->default(false);
+            $table->string('file_path');
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscription_payments');
+        Schema::dropIfExists('shop_pubmats');
     }
 };

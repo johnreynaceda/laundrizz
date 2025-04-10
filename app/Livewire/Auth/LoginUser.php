@@ -17,11 +17,11 @@ class LoginUser extends Component
     public $attempt;
 
     protected $rules = [
-        'email' => 'required|email',
+        'email' => 'required',
         'password' => 'required|min:6',
     ];
 
-    
+
 
 
     public function render()
@@ -29,52 +29,56 @@ class LoginUser extends Component
         return view('livewire.auth.login-user');
     }
 
-    public function login(){
+    public function login()
+    {
         sleep(1);
 
         $this->validate();
 
-        if (Auth::validate(['email' => $this->email, 'password' => $this->password])) {
+        $fieldType = filter_var($this->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        if (Auth::validate([$fieldType => $this->email, 'password' => $this->password])) {
             $this->attempt = Auth::getLastAttempted();
 
-        if ($this->attempt->user_type == 'customer') {
-           $otp =  str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
-           $this->attempt->update([
-            'requested_otp' => $otp,
-           ]);
-           $this->attempt->notify(new OtpNotification($otp));
-            $this->otp_modal = true;
-        } else {
-            Auth::login($this->attempt);
-            return redirect()->route('dashboard');
-        }
+            if ($this->attempt->user_type == 'customer') {
+                $otp = str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
+                $this->attempt->update([
+                    'requested_otp' => $otp,
+                ]);
+                $this->attempt->notify(new OtpNotification($otp));
+                $this->otp_modal = true;
+            } else {
+                Auth::login($this->attempt);
+                return redirect()->route('dashboard');
+            }
         } else {
             session()->flash('error', 'Invalid credentials. Please try again.');
         }
     }
 
-    
 
-    public function verifyLogin(){
-       sleep(2);
+
+    public function verifyLogin()
+    {
+        sleep(2);
         $otpInput = $this->one . $this->two . $this->three . $this->four;
-    
-        
-       
-    
+
+
+
+
         $user = $this->attempt;
         if ($user->requested_otp == $otpInput) {
             // Clear OTP after successful login
             $user->update(['requested_otp' => null]);
-    
+
             // Log the user in
             Auth::login($user);
-    
+
             // Redirect to the dashboard
             return redirect()->route('dashboard');
         } else {
             session()->flash('error', 'Invalid OTP. Please try again.');
         }
-    
+
     }
 }

@@ -28,10 +28,22 @@
                 </div>
             </div>
             <div class="mt-10" x-data="{ modalOpen: @entangle('option_modal') }" @keydown.escape.window="modalOpen = false">
-                <h1 class="text-lg text-gray-600">Select Laundry Shop</h1>
+                <div>
+                    <div class="flex px-4  rounded-md border-2 border-green-800 overflow-hidden max-w-md mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" width="16px"
+                            class="fill-gray-600  rotate-90">
+                            <path
+                                d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z">
+                            </path>
+                        </svg>
+                        <input type="email" placeholder="Search Laundry..." wire:model.live="search"
+                            class="w-full border-none focus:ring-0 bg-transparent text-gray-600 text-sm outline-none" />
+                    </div>
+                </div>
+                <h1 class="text-lg text-gray-600 mt-4">Select Laundry Shop</h1>
                 <div class="mt-3">
                     <div class="grid grid-cols-2 2xl:grid-cols-7 gap-5">
-                        @forelse (\App\Models\Shop::where('is_active', true)->get() as $item)
+                        @forelse ($laundries as $item)
                             <div>
                                 <div wire:click="selectLaundry({{ $item->id }})"
                                     class="w-40 h-40 border rounded-3xl overflow-hidden bg-gradient-to-tr from-main via-main to-white relative">
@@ -52,7 +64,51 @@
                 <div class="mt-10">
 
                 </div>
-                <div class="relative z-50 w-auto h-auto">
+
+                <x-filament::modal id="select-service-type" slide-over>
+                    <x-slot name="heading">
+                        <div class="uppercase"> {{ $laundry_name }}</div>
+                    </x-slot>
+                    <div>
+                        <div class="h-64 border">
+                            <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
+                                navigation="true" space-between="30" centered-slides="true" autoplay-delay="2500"
+                                autoplay-disable-on-interaction="false">
+                                @foreach ($pubmats as $item)
+                                    <swiper-slide>
+                                        <div class="w-full h-full">
+                                            <img src="{{ Storage::url($item->file_path) }}"
+                                                class="w-full h-64  object-cover" alt="">
+                                        </div>
+                                    </swiper-slide>
+                                @endforeach
+
+                            </swiper-container>
+                        </div>
+                        <div class="flex w-full items-center rounded-full">
+                            <div class="flex-1 border-b border-gray-300"></div>
+                            <span class="text-black text-lg font-semibold leading-8 px-8 py-3">SERVICE TYPE</span>
+                            <div class="flex-1 border-b border-gray-300"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-5 place-content-center mt-5">
+                            @forelse (\App\Models\ServiceType::all() as $item)
+                                <div wire:click="selectOption({{ $item->id }})"
+                                    class=" w-40 h-40 rounded-3xl grid place-content-center border text-center cursor-pointer hover:bg-gray-200">
+                                    @if ($item->id == 1)
+                                        <x-shared.svg.pickup class="h-24 w-24" />
+                                    @else
+                                        <x-shared.svg.dropoff class="h-24 w-24" />
+                                    @endif
+                                    <span class="font-semibold text-gray-600 mt-2">
+                                        {{ $item->id == 1 ? 'Pick Up' : 'Drop Off' }}
+                                    </span>
+                                </div>
+                            @empty
+                                <p>No Service Types Available</p>
+                            @endforelse
+                        </div>
+                </x-filament::modal>
+                {{-- <div class="relative z-50 w-auto h-auto">
                     <template x-teleport="body">
                         <div x-show="modalOpen" wire:ignore
                             class="fixed inset-0 z-[99] flex items-end justify-center w-screen h-screen" x-cloak>
@@ -112,7 +168,7 @@
                     </template>
 
 
-                </div>
+                </div> --}}
             </div>
 
 

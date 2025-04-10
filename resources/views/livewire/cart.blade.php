@@ -36,7 +36,7 @@
             @endif
         </div>
         <div class="col-span-3">
-            <div class="bg-white p-5 rounded-xl shadow-xl">
+            <div class="bg-white p-5 sticky top-64 rounded-xl shadow-xl">
                 <div class="flex justify-between items-center">
                     <span class="font-medium text-main text-lg">Subtotal</span>
                     <span

@@ -70,6 +70,9 @@ Route::prefix('admin')->middleware(['auth', 'verified', ShopSetup::class])
         Route::get('/support', function () {
             return view('admin.support');
         })->name('admin.support');
+        Route::get('/pubmat', function () {
+            return view('admin.pubmat');
+        })->name('admin.pubmat');
 
     });
 Route::get('/admin/account-setup', function () {

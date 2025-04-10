@@ -8,6 +8,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -24,15 +26,15 @@ class SubscriptionList extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Subscription::query())->headerActions([
-            CreateAction::make('new')->label('New Subscription')->icon('heroicon-o-plus-circle')->form([
-                Fieldset::make('PLAN INFORMATION')->schema([
-                    TextInput::make('name')->required(),
-                    Textarea::make('description')->columnSpan(2)->required(),
-                    TextInput::make('amount')->numeric()->prefix('PHP')->required(),
-                    TextInput::make('month')->label('No. of Months')->numeric()->required(),
-                ]),
-            ])->modalWidth('xl'),
-        ])
+                    CreateAction::make('new')->label('New Subscription')->icon('heroicon-o-plus-circle')->form([
+                        Fieldset::make('PLAN INFORMATION')->schema([
+                            TextInput::make('name')->required(),
+                            Textarea::make('description')->columnSpan(2)->required(),
+                            TextInput::make('amount')->numeric()->prefix('PHP')->required(),
+                            TextInput::make('month')->label('No. of Months')->numeric()->required(),
+                        ]),
+                    ])->modalWidth('xl'),
+                ])
             ->columns([
                 TextColumn::make('name')->label('NAME')->searchable(),
                 TextColumn::make('description')->label('DESCRIPTION')->searchable(),
@@ -48,7 +50,15 @@ class SubscriptionList extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-
+                EditAction::make('edit')->color('success')->form([
+                    Fieldset::make('PLAN INFORMATION')->schema([
+                        TextInput::make('name')->required(),
+                        Textarea::make('description')->columnSpan(2)->required(),
+                        TextInput::make('amount')->numeric()->prefix('PHP')->required(),
+                        TextInput::make('month')->label('No. of Months')->numeric()->required(),
+                    ]),
+                ])->modalWidth('xl'),
+                DeleteAction::make('delete')
             ])
             ->bulkActions([
                 // ...
