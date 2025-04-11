@@ -20,27 +20,31 @@ class MyLocation extends Component implements HasForms
     public $add_modal = false;
     public $is_edit = false;
     public $location_id;
-    public $name, $contact, $address, $is_default =false;
+    public $name, $contact, $address, $is_default = false;
 
-    public function mount(){
+    public function mount()
+    {
         $this->name = auth()->user()->name;
     }
 
-    public function updatedIsEdit(){
-        if($this->is_edit){
+    public function updatedIsEdit()
+    {
+        if ($this->is_edit) {
             $this->name = auth()->user()->name;
 
         }
     }
 
-    public function addLocation(){
+    public function addLocation()
+    {
         $this->is_edit = false;
         $this->add_modal = true;
         $this->location_id = null;
         $this->reset(['contact', 'address', 'is_default']);
     }
 
-    public function editLocation($location_id){
+    public function editLocation($location_id)
+    {
         $this->is_edit = true;
         $this->location_id = $location_id;
         $location = Location::find($location_id);
@@ -51,7 +55,8 @@ class MyLocation extends Component implements HasForms
         $this->add_modal = true;
     }
 
-    public function delete(){
+    public function delete()
+    {
         $location = Location::find($this->location_id);
         $location->delete();
         $this->add_modal = false;
@@ -65,72 +70,73 @@ class MyLocation extends Component implements HasForms
             ->schema([
                 Fieldset::make('CONTACT INFORMATION')->schema([
                     TextInput::make('name')->disabled()
-                    ->required(),
-                    TextInput::make('contact')
-                    ->required(),
+                        ->required(),
+                    TextInput::make('contact')->prefix('+63')
+                        ->required(),
                 ]),
                 Fieldset::make('ADDRESS INFORMATION')->schema([
                     // Textarea::make('address')->placeholder('Put your correct information here.')->tooltip("Ex. San Juan St. Blck. 1, Brgy. Buenaflor, Tacurong City, Sultan Kudarat")
                     Textarea::make('address')->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Ex. San Juan St. Blck. 1, Brgy. Buenaflor, Tacurong City, Sultan Kudarat')->required(),
                     Toggle::make('is_default')->onColor('success')->label('Set as default')->offColor('gray')
-                   
+
                 ]),
             ]);
     }
-    public function save(){
+    public function save()
+    {
         sleep(1);
         if (!$this->is_edit) {
             $this->validate([
-                'contact' => ['required', 'numeric', 'digits_between:1,11'], // Adjust digit limit as needed
+                'contact' => 'required|digits:10', // Adjust digit limit as needed
                 'address' => ['required', 'string', 'max:255'],
                 'is_default' => ['required', 'boolean'],
             ]);
-            
+
             Location::create([
                 'user_id' => auth()->user()->id,
-                'contact' => $this->contact,
+                'contact' => '0' . $this->contact,
                 'address' => $this->address,
                 'is_default' => $this->is_default,
             ]);
             $this->reset(['contact', 'address', 'is_default']);
-        }else{
+        } else {
             $this->validate([
-                'contact' => ['required', 'string', 'regex:/^\d{11}$/'], // Ensures exactly 11 digits
+                'contact' => 'required|digits:10', // Ensures exactly 11 digits
                 'address' => ['required', 'string', 'max:255'],
                 'is_default' => ['required', 'boolean'],
             ]);
-            
+
             // Find and update the existing default location
             $defaultLocation = Location::where('user_id', auth()->user()->id)
                 ->where('is_default', true)
                 ->first();
-            
+
             if ($defaultLocation) {
                 $defaultLocation->update(['is_default' => false]);
             }
-            
+
             // Find and update the specified location
             $location = Location::find($this->location_id);
             if ($location) {
                 $location->update([
-                    'contact' => $this->contact,
+                    'contact' => '0' . $this->contact,
                     'address' => $this->address,
                     'is_default' => $this->is_default,
                 ]);
             }
-            
+
             // Reset component state
             $this->reset(['contact', 'address', 'is_default']);
             $this->location_id = null;
             $this->is_edit = false;
-            
+
         }
         $this->add_modal = false;
     }
 
     public function render()
     {
-        return view('livewire.customer.my-location',[
+        return view('livewire.customer.my-location', [
             'locations' => Location::where('user_id', auth()->user()->id)->get(),
         ]);
     }
