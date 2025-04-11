@@ -54,7 +54,7 @@ class RegisterUser extends Component implements HasForms
             'username' => strtolower(str_replace(' ', '_', $this->name)),
             'password' => bcrypt($this->password),
             'user_type' => $this->type == 'Merchant' ? 'admin' : 'customer',
-            'is_approved' => $this->type != 'Merchant' ? true : false
+            // 'is_approved' => $this->type != 'Merchant' ? true : false
         ]);
 
         if ($this->type == 'Customer') {
