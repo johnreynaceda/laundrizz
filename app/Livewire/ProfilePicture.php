@@ -11,14 +11,15 @@ class ProfilePicture extends Component
     use WithFileUploads;
     public $profile;
 
-     public function updatedProfile(){
+    public function updatedProfile()
+    {
         // dd($this->profile);
         auth()->user()->update([
-            'profile_photo' => $this->profile->store('profile-photos', 'public')
+            'profile_photo' => encrypt($this->profile->store('profile-photos', 'public'))
         ]);
 
         sweetalert()->success('Profile picture updated successfully');
-     }
+    }
     public function render()
     {
         return view('livewire.profile-picture');

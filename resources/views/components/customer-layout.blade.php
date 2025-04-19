@@ -37,7 +37,7 @@
                                     <img src="{{ asset('images/no-profile.jpg') }}"
                                         class="rounded-lg object-cover h-full w-full" alt="">
                                 @else
-                                    <img src="{{ Storage::url(auth()->user()->profile_photo) }}"
+                                    <img src="{{ Storage::url(decrypt(auth()->user()->profile_photo)) }}"
                                         class="rounded-lg object-cover h-full w-full" alt="">
                                 @endif
 

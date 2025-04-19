@@ -18,6 +18,8 @@ class RegisterUser extends Component implements HasForms
 {
     use InteractsWithForms;
     public $type;
+    public $data_privacy;
+    public $terms_agreement;
 
     public $name, $email, $password, $confirm_password, $identification = [];
 
@@ -46,7 +48,12 @@ class RegisterUser extends Component implements HasForms
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
             'confirm_password' => 'required'
+
         ]);
+        if (!$this->data_privacy && !$this->terms_agreement) {
+            sweetalert()->error('Please agree to the Data Privacy Agreement and Terms of Agreement before creating an account.');
+            return;
+        }
 
         $user = User::create([
             'name' => $this->name,
@@ -54,14 +61,16 @@ class RegisterUser extends Component implements HasForms
             'username' => strtolower(str_replace(' ', '_', $this->name)),
             'password' => bcrypt($this->password),
             'user_type' => $this->type == 'Merchant' ? 'admin' : 'customer',
-            // 'is_approved' => $this->type != 'Merchant' ? true : false
+            'is_approved' => $this->type != 'Merchant' ? true : false,
+            'data_privacy' => true,
+            'terms_agreement' => true
         ]);
 
         if ($this->type == 'Customer') {
             foreach ($this->identification as $key => $value) {
                 CustomerProfile::create([
                     'user_id' => $user->id,
-                    'identification_path' => $value->store('identifications', 'public'),
+                    'identification_path' => encrypt($value->store('identifications', 'public')),
                 ]);
             }
         }

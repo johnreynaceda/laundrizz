@@ -144,8 +144,9 @@
                                 <h1 class="text-lg font-semibold text-gray-600">Payment:</h1>
                                 <div class="mt-1  rounded-xl border overflow-hidden">
                                     @if ($detail->proof_of_payment)
-                                        <a href="{{ Storage::url($detail->proof_of_payment) }}" target="_blank">
-                                            <img src="{{ Storage::url($detail->proof_of_payment) }}"
+                                        <a href="{{ Storage::url(decrypt($detail->proof_of_payment)) }}"
+                                            target="_blank">
+                                            <img src="{{ Storage::url(decrypt($detail->proof_of_payment)) }}"
                                                 class="w-full h-40 hover:scale-95 transition ease-out duration-300 object-cover"
                                                 alt="">
                                         </a>

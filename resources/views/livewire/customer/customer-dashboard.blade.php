@@ -47,7 +47,7 @@
                             <div>
                                 <div wire:click="selectLaundry({{ $item->id }})"
                                     class="w-40 h-40 border rounded-3xl overflow-hidden bg-gradient-to-tr from-main via-main to-white relative">
-                                    <img src="{{ Storage::url($item->image_path) }}"
+                                    <img src="{{ Storage::url(decrypt($item->image_path)) }}"
                                         class="w-full h-full opacity-40 object-cover" alt="">
                                     <div class="absolute bottom-5 left-2 text-white">
                                         <p class="font-bold">{{ $item->name }}</p>

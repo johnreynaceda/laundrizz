@@ -86,7 +86,7 @@ class Cart extends Component implements HasForms
                 'description' => $this->description,
                 'address' => $this->address,
                 'contact' => $this->phone_number,
-                'image_path' => $value->store('Shop', 'public'),
+                'image_path' => encrypt($value->store('Shop', 'public')),
                 'subscription_id' => $this->get_subscription,
                 'user_id' => auth()->user()->id,
             ]);
@@ -97,19 +97,19 @@ class Cart extends Component implements HasForms
                     'subscription_id' => $this->get_subscription,
                     'amount' => $this->selected_subscription->amount,
                     'reference_number' => $this->reference_number,
-                    'payment_image_path' => $image->store('Payment', 'public'),
+                    'payment_image_path' => encrypt($image->store('Payment', 'public')),
                 ]);
             }
 
         }
         foreach ($this->permit as $key => $permit) {
             $shop->update([
-                'business_permit_path' => $permit->store('Permit', 'public'),
+                'business_permit_path' => encrypt($permit->store('Permit', 'public')),
             ]);
         }
         foreach ($this->identification as $key => $identification) {
             $shop->update([
-                'identification_path' => $identification->store('Identification', 'public'),
+                'identification_path' => encrypt($identification->store('Identification', 'public')),
             ]);
         }
 

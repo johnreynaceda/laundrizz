@@ -71,7 +71,7 @@ class PaymentRecord extends Component implements HasForms, HasTable
         foreach ($this->gcash as $key => $value) {
             PaymentMethod::create([
                 'user_id' => auth()->user()->id,
-                'payment_photo' => $value->store('GCASH PAYMENT', 'public')
+                'payment_photo' => encrypt($value->store('GCASH PAYMENT', 'public'))
             ]);
         }
         $this->reset('gcash');
@@ -80,7 +80,7 @@ class PaymentRecord extends Component implements HasForms, HasTable
     {
         foreach ($this->gcash as $key => $value) {
             auth()->user()->paymentMethod->update([
-                'payment_photo' => $value->store('GCASH PAYMENT', 'public')
+                'payment_photo' => encrypt($value->store('GCASH PAYMENT', 'public'))
             ]);
         }
         $this->reset('gcash');

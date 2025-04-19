@@ -21,6 +21,8 @@ return new class extends Migration {
             $table->boolean('is_approved')->default(false);
             $table->integer('requested_otp')->nullable();
             $table->string('profile_photo')->nullable();
+            $table->boolean('data_privacy');
+            $table->boolean('terms_agreement');
             $table->rememberToken();
             $table->timestamps();
         });

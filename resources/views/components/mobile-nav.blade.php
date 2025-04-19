@@ -35,12 +35,13 @@
                 </svg>
             </a>
 
-            <a href="{{route('profile.edit')}}"
+            <a href="{{ route('profile.edit') }}"
                 class="h-14 w-14 bg-white text-main border-2 p-0.5 overflow-hidden relative rounded-full">
                 @if (auth()->user()->profile_photo == null)
-                    <img src="{{asset('images/no-profile.jpg')}}" class="rounded-full h-full w-full object-cover" alt="">
+                    <img src="{{ asset('images/no-profile.jpg') }}" class="rounded-full h-full w-full object-cover"
+                        alt="">
                 @else
-                    <img src="{{Storage::url(auth()->user()->profile_photo)}}"
+                    <img src="{{ Storage::url(decrypt(auth()->user()->profile_photo)) }}"
                         class="rounded-full h-full w-full object-cover" alt="">
                 @endif
             </a>

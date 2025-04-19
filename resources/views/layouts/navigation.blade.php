@@ -180,7 +180,7 @@
                             <img src="{{ asset('images/no-profile.jpg') }}"
                                 class="object-cover w-8 h-8 border rounded-full border-neutral-200" />
                         @else
-                            <img src="{{ Storage::url(auth()->user()->profile_photo) }}"
+                            <img src="{{ Storage::url(decrypt(auth()->user()->profile_photo)) }}"
                                 class="object-cover w-8 h-8 border rounded-full border-neutral-200" />
                         @endif
                         <span class="flex flex-col items-start flex-shrink-0 h-full ml-2 leading-none translate-y-px">

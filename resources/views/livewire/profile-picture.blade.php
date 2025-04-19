@@ -9,7 +9,7 @@
                     <img src="{{ $profile->temporaryUrl() }}" alt="Profile Picture"
                         class="rounded-full w-32 h-32 mx-auto object-cover border-4 border-main mb-4 transition-transform duration-300 hover:scale-105 ring ring-gray-300">
                 @else
-                    <img src="{{ Storage::url(auth()->user()->profile_photo) }}" alt="Profile Picture"
+                    <img src="{{ Storage::url(decrypt(auth()->user()->profile_photo)) }}" alt="Profile Picture"
                         class="rounded-full object-cover w-32 h-32 mx-auto border-4 border-main mb-4 transition-transform duration-300 hover:scale-105 ring ring-gray-300">
                 @endif
             @endif

@@ -111,19 +111,21 @@
             @default
         @endswitch
     @endif
-    <div class="mt-5 text-center">
-        <p>
+    <div class="mt-5 flex flex-col justify-center items-center">
+        <div class="flex space-x-2 items-center">
+            <x-checkbox id="size-sm" wire:model="data_privacy" value="sm" sm />
             <button @click="$dispatch('open-modal', { id: 'data-privacy' })"
                 class="text-sm hover:underline hover:text-green-600 text-gray-600">
                 Data Privacy Agreement
             </button>
-        </p>
-        <p>
+        </div>
+        <div class="flex space-x-2 items-center">
+            <x-checkbox id="size-sm" wire:model="terms_agreement" value="sm" sm />
             <button @click="$dispatch('open-modal', { id: 'agreement' })"
                 class="text-sm hover:underline hover:text-green-600 text-gray-600">
                 Terms and Agreements
             </button>
-        </p>
+        </div>
 
         <x-filament::modal id="data-privacy">
             <x-slot name="header">

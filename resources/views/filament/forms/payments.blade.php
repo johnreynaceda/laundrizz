@@ -1,6 +1,6 @@
 @foreach ($getRecord()->subscriptionPayments as $item)
     <div class="flex gap-3">
-        <img src="{{ Storage::url($getRecord()->image_path) }}" alt="Hailey image"
+        <img src="{{ Storage::url(decrypt($getRecord()->image_path)) }}" alt="Hailey image"
             class="w-12 h-12 object-cover rounded-full">
         <div class="grid gap-3">
             <div class="grid gap-0.5">
@@ -9,7 +9,7 @@
                 </h3>
             </div>
             <div class="flex space-x-4 items-end">
-                <a href="{{ Storage::url($item->payment_image_path) }}" target="_blank"
+                <a href="{{ Storage::url(decrypt($item->payment_image_path)) }}" target="_blank"
                     class="w-fit p-3 bg-gray-50 hover:bg-gray-100 rounded-lg flex gap-1 ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="34"
                         class="{{ $item->is_paid == true ? 'text-green-700' : '' }}" height="34" viewBox="0 0 34 34"

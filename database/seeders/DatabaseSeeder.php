@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             'user_type' => 'superadmin',
             'email_verified_at' => now(),
             'is_approved' => true,
+            'data_privacy' => true,
+            'terms_agreement' => true
         ]);
         // User::create([
         //     'name' => 'administrator',

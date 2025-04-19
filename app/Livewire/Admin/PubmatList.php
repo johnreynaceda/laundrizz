@@ -36,7 +36,7 @@ class PubmatList extends Component implements HasForms, HasTable
     public function savePubmat()
     {
         foreach ($this->file_path as $key => $value) {
-            $file = $value->store('pubmat', 'public');
+            $file = encrypt($value->store('pubmat', 'public'));
             ShopPubmat::create([
                 'shop_id' => auth()->user()->shop->id,
                 'file_path' => $file,

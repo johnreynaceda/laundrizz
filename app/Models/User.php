@@ -26,7 +26,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_approved',
         'requested_otp',
         'email_verified_at',
-        'profile_photo'
+        'profile_photo',
+        'data_privacy',
+        'terms_agreement'
     ];
 
     /**
